@@ -1,0 +1,58 @@
+.node {
+    width: 20px; height:  20px;
+    outline: 1px solid #0f0e0e;
+    display: inline-block;
+}
+.node-start {
+    width: 20px; height:  20px;
+    outline: 1px solid #0f0e0e;
+    display: inline-block;
+    background-color: rgb(51, 255, 0);
+}
+.node-end{
+    width: 20px; height:  20px;
+    outline: 1px solid #0f0e0e;
+    display: inline-block;
+    background-color: red;
+}
+.node-wall{
+    width: 20px; height:  20px;
+    outline: 1px solid #0f0e0e;
+    display: inline-block;
+    background-color: black;
+}
+
+.node-path {
+    width: 20px; height:  20px;
+    outline: 1px solid #0f0e0e;
+    display: inline-block;
+    background-color: rgb(255, 250, 0);
+}
+.node-visited{
+    width: 20px; height:  20px;
+    outline: 1px solid #0f0e0e;
+    display: inline-block;
+    background-color: rgb(35, 213, 219);
+}
+
+@keyframes visitedAnimated {
+  0% {
+    transform: scale(.3);
+    background-color: rgba(0, 0, 66, 0.75);
+    border-radius: 100%;
+  }
+
+  50% {
+    background-color: rgba(17, 104, 217, 0.75);
+  }
+
+  75% {
+    transform: scale(1.2);
+    background-color: rgba(0, 217, 159, 0.75)
+  }
+
+  100% {
+    transform: scale(1.0);
+    background-color: rgba(0, 190, 218, 0.75);
+  }
+}
