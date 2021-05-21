@@ -1,158 +1,152 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState} from 'react'
 import Node from '../Node'
+import './Board.css'
 import BFS from '../../algorithms/bfsSearch'
-import {SingleNode} from '../../interfaces/gridInterfaces'
+import {algorithmNode, cordinate} from '../../interfaces'
 
-const HEIGHT  = 20
-const WIDTH = 40
+const HIEGHT = 30
+const WIDTH = 50
 
-
-const createNode = (row: number, col: number) => {
-    const newNode: SingleNode = {
-        row: row, col: col,
-        isStart: false,
-        isFinish: false,
-        distance: Infinity,
-        isWall: false,
-        isVisited: false,
-        isPath: false,
-        previousNode: undefined
-    }
-    return newNode
+type NodeHandle = React.ElementRef<typeof Node>
+interface gridNode {
+    row: number,
+    col: number,
+    ref: any
 }
 
-const getInitialGrid = () => {
-    const grid : SingleNode[][] = []
-    for(let row = 0; row < HEIGHT; row++){
-        const currentRow: SingleNode[] = []
-        for(let col = 0; col < WIDTH; col++){
-            currentRow.push(createNode(row, col))
+
+const Board : React.FC = () => {
+    const [isMousePressed, setIsMousePressed] = useState<boolean>(false)
+    const [grid, setGrid] = useState<gridNode[][]>([])
+    const [start] = useState<cordinate>({
+        row: Math.floor(HIEGHT / 2),
+        col: Math.floor(WIDTH / 4)
+    })
+    const [finish] = useState<cordinate>({
+        row: Math.floor(HIEGHT / 2),
+        col: Math.floor(3 * WIDTH / 4)
+    })
+    const makeGrid = (): void => {
+        const newGrid: gridNode[][] = []
+        for (let i = 0; i < HIEGHT; i++) {
+            const gridRow: gridNode[] = []
+            for (let j = 0; j < WIDTH; j++) {
+                const node: gridNode = {
+                    row: i,
+                    col: j,
+                    ref: React.createRef<NodeHandle>()
+                }
+                gridRow.push(node)
+            }
+            newGrid.push(gridRow)
         }
-        grid.push(currentRow)
+        setGrid(newGrid)
     }
-    return grid
-}
-
-const updateGridWall = (grid: SingleNode[][], row: number, col: number) => {
-    let newGrid = grid.slice()
-    const node = newGrid[row][col]
-    const newNode = {
-        ...node, 
-        isWall: true
-    }
-    newGrid[row][col] = newNode
-    return newGrid
-}
-
-
-const Board : React.FC<any> = () => {
-    const [grid, setGrid] = useState<SingleNode[][]>([])
-    const [mousePressed, setMousePressed] = useState<boolean>(false)
-    const [start, setStart] = useState({})
-    const [end , setFinish] = useState({})
-
 
     useEffect(() => {
-        let grid = getInitialGrid()
-        const startRow = Math.floor(HEIGHT / 2)
-        const startCol = Math.floor(WIDTH / 4)
-        grid[startRow][startCol].isStart = true
-        setStart({
-            row: startRow,
-            col: startCol
-        })
-
-        const finishRow= Math.floor(HEIGHT / 2)
-        const finishCol= Math.floor(3 * WIDTH / 4)
-        setFinish({
-            row: finishRow,
-            col: finishCol
-        })
-        grid[startRow][startCol].isStart = true
-        grid[finishRow][finishCol].isFinish = true
-        setGrid(grid)
+        makeGrid()
     }, [])
 
-    const handleMouseDown = (row:number, col: number) => {
-        setMousePressed(true)
-        const newGrid = updateGridWall(grid, row, col)
-        setGrid(newGrid)
+    const handleMouseDown = (row: number, col: number) : void => {
+        setIsMousePressed(true)
+        const nodeRef = grid[row][col].ref
+        const nodeState = nodeRef.current.state
+        if(nodeState !== 'start' && nodeState !== 'end'){
+            nodeRef.current.changeStatus('unweighted-wall')
+        }
     }
-    const handleMouseEnter = (row: number, col: number) => {
-        if(!mousePressed) return
-        const newGrid = updateGridWall(grid, row, col)
-        setGrid(newGrid)
-    }
-    const handleMouseUp = () => {
-        setMousePressed(false)
+    const handleMouseEnter = (row: number, col: number): void => {
+        if(!isMousePressed) return 
+        const nodeRef = grid[row][col].ref
+        const nodeState = nodeRef.current.state
+        if(nodeState !== 'start' && nodeState !== 'end'){
+            nodeRef.current.changeStatus('unweighted-wall')
+        }
     }
 
-    const animatePath = (path : SingleNode[]) => {
+    const handleMouseUp = (event: React.MouseEvent) : void => {
+        setIsMousePressed(false)
+    }
+
+    const animatePath = (path: algorithmNode[]): void => {
         for(let i = 0; i < path.length; i++){
             setTimeout(() => {
-            let newGrid = grid.slice()
-            const node = path[i]
-            newGrid[node.row][node.col].isPath = true
-                setGrid(newGrid)
-            }, 10* i)
-        } 
+                const node = path[i]
+                const nodeRef = grid[node.row][node.col].ref.current
+                nodeRef.changeStatus('path')
+            }, 20 * i)
+        }
     }
 
-    const animateAlgorithm = (nodeVisitedOrder: SingleNode[], path: SingleNode[]) => {
+    const aninimateVisitedNode = (nodeVisitedOrder: algorithmNode[], path: algorithmNode[] | undefined, endReached: boolean): void => {
         for(let i = 0; i <= nodeVisitedOrder.length; i++){
             if(i === nodeVisitedOrder.length){
                 setTimeout(() => {
-                    animatePath(path)
-                }, 10 * i)
-                return
+                    if(endReached && path) animatePath(path)
+                    else alert('no path found')
+                }, 5 * i)
+                return 
             }
             setTimeout(() => {
-            let newGrid = grid.slice()
-            const node = nodeVisitedOrder[i]
-            newGrid[node.row][node.col].isVisited= true
-                setGrid(newGrid)
-            }, 10* i)
-        }
-    } 
-    const handleVisualized = () => {
-        const {nodeVisitedOrder, path, endReached} = BFS(grid, start, end)
-        animateAlgorithm(nodeVisitedOrder, path)
-        if(!endReached){
-            alert('no path found')
-            return 
+                const node = nodeVisitedOrder[i]
+                const nodeRef = grid[node.row][node.col].ref.current
+                nodeRef.changeStatus('visited')
+            }, 5 * i)
         }
     }
 
+    const handleVisualize = (): void => {
+        const nodeGrid: algorithmNode[][] = []
+        for(let i = 0; i < grid.length; i++){
+            let nodeRow : algorithmNode[] = []
+            for(let j = 0; j < grid[i].length; j++){
+                let newNode : algorithmNode = {
+                    row: i,
+                    col: j,
+                    status: grid[i][j].ref.current.status,
+                    previousNode: undefined 
+                }
+                nodeRow.push(newNode)
+            }
+            nodeGrid.push(nodeRow)
+        }
+        const {endReached, path, nodeVisitedOrder} = BFS(nodeGrid, start, finish)
+        aninimateVisitedNode(nodeVisitedOrder, path, endReached)
+    }
     return (
-        <div style={{ 
-            height: '100px'
-        }}>
-            <button onClick={handleVisualized}>visulize</button>
-        <div className="grid"
-            onMouseLeave={() => { handleMouseUp() }}
-            onMouseDown={() => { setMousePressed(true) }}
-            onMouseUp={() => handleMouseUp()}
-        >
-            {grid.map((row, rowInd) => {
-                return (
-                    <div className='grid-row' key={rowInd}>
-                        {row.map((node, colInd) => {
-                            const { row, col } = node
-                            return (
-                                <Node
-                                    key={colInd}
-                                    node={node}
-                                    mousePressed={mousePressed}
-                                    onMouseDown={() => handleMouseDown(row, col)}
-                                    onMouseEnter={() => handleMouseEnter(row, col)}
-                                    onMouseUp={handleMouseUp}
-                                />
-                            )
-                        })}
-                    </div>
-                )
-            })}
-        </div>
+        <div>
+            <button onClick={handleVisualize}>Visualize</button>
+            <div className="grid"
+                onMouseDown={(e: React.MouseEvent) => {
+                    e.preventDefault()
+                    setIsMousePressed(true)
+                }}
+                onMouseLeave={handleMouseUp}
+            >
+                {grid.map((row, rowInd) => {
+                    return (
+                        <div className='grid-row' key={rowInd}>
+                            {row.map((node, colInd) => {
+                                const { row, col, ref } = node
+                                return (
+                                    <Node
+                                        start={start}
+                                        finish={finish}
+                                        ref={ref}
+                                        key={colInd} 
+                                        row={row}
+                                        col={col}
+                                        onMouseDown={handleMouseDown}
+                                        onMouseEnter={handleMouseEnter}
+                                        onMouseUp={handleMouseUp}
+                                    ></Node>
+                                )
+                            })}
+                        </div>
+                    )
+                })}
+            </div>
+
         </div>
     )
 }
