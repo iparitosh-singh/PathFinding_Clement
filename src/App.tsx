@@ -1,10 +1,14 @@
 import './App.css';
-import DevBoard from './components/Board'
+import Board from './components/Board'
 
 function App() {
+  const HEIGHT = 30, WIDTH = 40
   return (
     <div className="App">
-      <DevBoard />
+      <Board 
+        height={HEIGHT}
+        width={WIDTH}
+      />
     </div>
   );
 }

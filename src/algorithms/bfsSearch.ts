@@ -23,40 +23,41 @@ const BFS = (grid: algorithmNode[][], start: cordinate, finish: cordinate): retu
     while (rq.length && cq.length) {
         let r = rq.shift()
         let c = cq.shift()
-
-        if (r === finish.row && c === finish.col) {
-            endReached = true
-            if (r !== undefined && c !== undefined)
-                nodeVisitedOrder.push(grid[r][c])
+        if (flag)
             break
-        }
+        if (r !== undefined && c !== undefined) {
+            if (r === finish.row && c === finish.col) {
+                endReached = true
+                nodeVisitedOrder.push(grid[r][c])
+                break
+            }
+            for (let i = 0; i < 4; i++) {
+                if (r !== undefined && c !== undefined) {
+                    let rr = r + dr[i]
+                    let cc = c + dc[i]
+                    
+                    if (rr < 0 || cc < 0) continue
+                    if (rr >= R || cc >= C) continue
 
-        for (let i = 0; i < 4; i++) {
-            if (r !== undefined && c !== undefined) {
-                let rr = r + dr[i]
-                let cc = c + dc[i]
+                    if (visited[rr][cc]) continue
+                    if (grid[rr][cc].status === 'unweighted-wall' || grid[rr][cc].status === 'weighted-wall') continue
 
-                if (rr < 0 || cc < 0) continue
-                if (rr >= R || cc >= C) continue
-
-                if (visited[rr][cc]) continue
-                if (grid[rr][cc].status === 'unweighted-wall') continue
-
-
-                rq.push(rr)
-                cq.push(cc)
-                visited[rr][cc] = true
-                grid[rr][cc].previousNode = grid[r][c]
-                nodeVisitedOrder.push(grid[rr][cc])
-                if (rr === finish.row && cc === finish.col) {
-                    flag = true
-                    break
+                    rq.push(rr)
+                    cq.push(cc)
+                    visited[rr][cc] = true
+                    grid[rr][cc].previousNode = grid[r][c]
+                    nodeVisitedOrder.push(grid[rr][cc])
+                    if (rr === finish.row && cc === finish.col) {
+                        endReached = true
+                        flag = true
+                        break
+                    }
                 }
             }
-            if (flag)
-                break
+
         }
     }
+
     let path: algorithmNode[] = []
     if(endReached){
         let currentNode: algorithmNode | undefined

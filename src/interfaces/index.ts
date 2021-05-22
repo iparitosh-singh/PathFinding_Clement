@@ -17,14 +17,20 @@ export interface returnValue {
     endReached: boolean 
 }
 
+export interface BoardProps {
+    height: number,
+    width: number
+}
+
 export interface NodeProps {
-    start: cordinate,
-    finish: cordinate,
+    isStart: cordinate,
+    isFinish: cordinate,
     row: number,
     col: number,
     key: number,
     onMouseDown: (row: number, col: number) => void
-    onMouseEnter: (row: number, col: number) => void
     onMouseUp: (event: React.MouseEvent<HTMLDivElement>) => void
+    onMouseEnter: (row: number, col: number) => void
+    onMouseLeave: (row: number, col: number) => void
     ref: any
 }

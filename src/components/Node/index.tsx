@@ -31,31 +31,39 @@ const getClassNameFromStatus = (newStatus: string): string => {
 
 export interface NodeHandle {
     changeStatus: (status: string) => void,
-    status: string
+    status: string,
+    prevState: string
 }
 
 const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref) => {
     const [className, setClassName] = useState<string>('node')
+    const [prevState, setPrevState] = useState<string>('univisted')
     const [status, setStatus] = useState<string>('unvisited')
+    const {isStart, isFinish, row, col} = props
 
     useEffect(() => {
-        if(props.start.row === props.row && props.start.col === props.col){
-            changeStatus('start')
+        let status = 'unvisited'
+        if(isStart.row === row && isStart.col === col){
+            status = 'start'
         }
-        if(props.finish.row === props.row && props.finish.col === props.col){
-            changeStatus('finish')
+        else if(isFinish.row === row && col === isFinish.col){
+            status = 'finish'
         }
-    }, [props])
-
-    const changeStatus = (status: string): void => {
-        setClassName(getClassNameFromStatus(status))
         setStatus(status)
+        setClassName(getClassNameFromStatus(status))
+    }, [isStart, isFinish, row, col])
+
+    const changeStatus = (newStatus: string): void => {
+        setClassName(getClassNameFromStatus(newStatus))
+        setPrevState(status)
+        setStatus(newStatus)
     }
 
     useImperativeHandle(ref, () => {
         return {
             changeStatus,
             status,
+            prevState
         }
     })
     return (
@@ -66,6 +74,7 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
             }}
             onMouseEnter={() => props.onMouseEnter(props.row, props.col)}
             onMouseUp={props.onMouseUp}
+            onMouseLeave={() => props.onMouseLeave(props.row, props.col)}
         >
         </div>
     )
