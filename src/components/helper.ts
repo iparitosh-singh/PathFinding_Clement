@@ -1,6 +1,7 @@
 import { BFS, Dijkstra } from '../algorithms'
 import { algorithmNode, returnValue, algoType} from '../interfaces'
 import { gridNode } from './Board'
+import * as nodeTypes from './nodeType'
 
 
 export const algorithms: algoType[] = [
@@ -23,17 +24,18 @@ const getNewAlgoNode = (row: number, col: number) : algorithmNode => {
         status: 'start',
         previousNode: undefined,
         weight: 1,
-        isWall: false
+        isWall: false,
+        heuristicDistance: 0
     }
 }
 
-export const getStatus = (gridNode: gridNode) => {
+export const getStatus = (gridNode: gridNode): string | undefined => {
     const nodeRef = gridNode.ref
     return nodeRef.current?.status
 }
 export const changeNormal = (node: gridNode, status: string | undefined): void => {
     const nodeRef = node.ref
-    if(!status) nodeRef.current?.changeStatus('unvisited')
+    if(!status) nodeRef.current?.changeStatus(nodeTypes.UNVISITED)
     else nodeRef.current?.changeStatus(status)
 }
 
@@ -52,13 +54,13 @@ const makeGrid = (grid: gridNode[][]): {
             const status = getStatus(grid[i][j])
             if (nodeRef && status) {
                 let newNode = getNewAlgoNode(i, j)
-                if (status === 'unweighted-wall' || status === 'weighted-wall') {
+                if (status === nodeTypes.WALL) {
                     newNode.isWall = true
                 }
-                if (status === 'start') {
+                if (status === nodeTypes.START) {
                     start = newNode
                 }
-                else if (status === 'finish') {
+                else if (status === nodeTypes.FINISH) {
                     finish = newNode
                 }
                 nodeRow.push(newNode)
@@ -69,46 +71,7 @@ const makeGrid = (grid: gridNode[][]): {
     return { nodeGrid, start, finish }
 }
 
-export const getClassNameFromStatus = (newStatus: string): string => {
-    let newClassName = 'node'
-    switch(newStatus){
-        case 'unweighted-wall': 
-            newClassName += '-wall'
-            break
-        case 'weighted-wall':
-            newClassName += '-weighted-wall'
-            break
-        case 'visited':
-                newClassName += '-visited'
-            break
-        case 'path': 
-                newClassName += '-path'
-            break
-        case 'unVisited':
-            break
-        case 'start':
-                newClassName += '-start'
-            break
-        case 'finish':
-                newClassName += '-end'
-            break
-        case 'start-visited':
-                newClassName += '-visited-start';
-                break
-        case 'finish-visited':
-                newClassName += '-visited-finish';
-                break
-        case 'start-path':
-                newClassName += '-path-start'
-                break
-        case 'finish-path':
-                newClassName += '-path-finish'
-                break
-    }
-    return newClassName 
-}
 export const getNodeVistedOrder = (selectedAlgo: number, grid: gridNode[][] ): returnValue => {
-    console.log(selectedAlgo)
     const {nodeGrid, start, finish}= makeGrid(grid)
     return algorithms[selectedAlgo].algorithm(nodeGrid, start, finish)
 }

@@ -1,7 +1,3 @@
-:root {
-    --flexgrow: 1;
-}
-
 .node {
     flex-grow: 1;
     flex-shrink: 1;
@@ -9,26 +5,21 @@
     display: inline-block;
 }
 
-.node-start {
-    flex-grow: 1;
-    flex-shrink: 1;
+.unvisited {
+    outline: 1px solid rgb(175, 216, 248);
+}
+
+.start {
     outline: 1px solid #0f0e0e;
-    display: inline-block;
     background-color: rgb(51, 255, 0);
 }
 
-.node-end {
-    flex-grow: 1;
-    flex-shrink: 1;
+.finish {
     outline: 1px solid rgba(12, 53, 71);
-    display: inline-block;
     background-color: red;
 }
 
-.node-wall {
-    flex-grow: 1;
-    flex-shrink: 1;
-    display: inline-block;
+.wall {
     outline: 1px solid rgba(12, 53, 71);
     animation-name: wallAnimation;
     animation-duration: 0.3s;
@@ -40,36 +31,24 @@
     animation-play-state: running;
 }
 
-.node-path {
-    flex-grow: 1;
-    flex-shrink: 1;
+.path {
     outline: 1px solid yellow;
-    display: inline-block;
     background-color: rgb(255, 250, 0);
 }
 
-.node-path-start {
-    flex-grow: 1;
-    flex-shrink: 1;
+.path-start {
     outline: 1px solid yellow;
-    display: inline-block;
     background-color: rgb(255, 250, 0);
 }
 
-.node-path-finish {
-    flex-grow: 1;
-    flex-shrink: 1;
+.path-finish {
     outline: 1px solid yellow;
-    display: inline-block;
     background-color: rgb(255, 250, 0);
 }
 
-.node-visited {
-    flex-grow: 1;
-    flex-shrink: 1;
+.visited {
     animation: visitedAnimated;
     outline: 1px solid rgba(175, 217, 248);
-    display: inline-block;
     animation-duration: 1.5s;
     animation-timing-function: ease-out;
     animation-delay: 0;
@@ -79,12 +58,9 @@
     animation-play-state: running;
 }
 
-.node-visited-start {
-    flex-grow: 1;
-    flex-shrink: 1;
+.visited-start {
     animation: visitedAnimatedStart;
     outline: 1px solid rgba(175, 217, 248);
-    display: inline-block;
     animation-duration: 1.5s;
     animation-timing-function: ease-out;
     animation-delay: 0;
@@ -94,12 +70,9 @@
     animation-play-state: running;
 }
 
-.node-visited-finish {
-    flex-grow: 1;
-    flex-shrink: 1;
+.visited-finish {
     animation: visitedAnimatedFinish;
     outline: 1px solid rgba(175, 217, 248);
-    display: inline-block;
     animation-duration: 1.5s;
     animation-timing-function: ease-out;
     animation-delay: 0;

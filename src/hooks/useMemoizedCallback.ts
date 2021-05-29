@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useRef} from 'react'
 
+//pricesless hook
 const useMemoizedCallback = (callback: any, inputs: any = []) => {
     const callbackRef = useRef(callback)
 

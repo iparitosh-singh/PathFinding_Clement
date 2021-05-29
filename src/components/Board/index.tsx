@@ -4,6 +4,7 @@ import './Board.css'
 import { algorithmNode, cordinate, BoardProps } from '../../interfaces'
 import {changeNormal, getStatus, getNodeVistedOrder, algorithms } from '../helper'
 import useMemoizedCallback from '../../hooks/useMemoizedCallback'
+import * as nodeTypes from '../nodeType'
 
 
 export type NodeHandle = React.ElementRef<typeof Node>
@@ -53,37 +54,40 @@ const Board: React.FC<BoardProps> = (props) => {
     useEffect(() => {
         setGrid(makeGrid())
     }, [makeGrid])
+
     const handleMouseDown = useMemoizedCallback((row: number, col: number): void => {
-        const nodeRef = grid[row][col]
-        const nodeState = getStatus(nodeRef) 
+        const node = grid[row][col]
+        if(!node.ref.current) return
+        const nodeState = getStatus(node) 
         if (nodeState)
             setNodePressed(nodeState)
 
-        if (nodeState !== 'start' && nodeState !== 'finish') {
-            changeNormal(nodeRef, 'unweighted-wall')
+        if (nodeState !== nodeTypes.START && nodeState !== nodeTypes.FINISH) {
+            changeNormal(node, nodeTypes.WALL)
         }
     }, [setNodePressed, grid])
 
     const handleMouseEnter = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
         if (event.buttons !== 1) return
-        const nodeRef = grid[row][col].ref
-        const nodeState = nodeRef.current?.status
-        if (nodePressed !== 'start' && nodePressed !== 'finish') {
-            if (nodeState !== 'start' && nodeState !== 'finish') {
-                changeNormal(grid[row][col], 'unweighted-wall')
+        const node = grid[row][col]
+        if(!node.ref.current) return
+        const nodeState = getStatus(node) 
+        if (nodePressed !== nodeTypes.START && nodePressed !== nodeTypes.FINISH) {
+            if (nodeState !== nodeTypes.START && nodeState !== nodeTypes.FINISH) {
+                changeNormal(grid[row][col], nodeTypes.WALL)
             }
         }
         else {
-            nodeRef.current?.changeStatus(nodePressed)
+            node.ref.current.changeStatus(nodePressed)
         }
     }, [grid, nodePressed])
 
     const handleMouseLeave = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
         if (event.buttons !== 1) return
-        if (nodePressed !== 'start' && nodePressed !== 'finish') return
-        const nodeRef = grid[row][col]
-        const prevStatus = nodeRef.ref.current?.prevState
-            changeNormal(nodeRef, prevStatus)
+        if (nodePressed !== nodeTypes.START && nodePressed !== nodeTypes.FINISH) return
+        const node= grid[row][col]
+        const prevStatus = node.ref.current?.prevState
+        changeNormal(node, prevStatus)
     }, [grid, nodePressed])
 
 
@@ -93,11 +97,11 @@ const Board: React.FC<BoardProps> = (props) => {
             setTimeout(() => {
                 const { row, col } = path[i];
                 if(i === 0)
-                    changeNormal(grid[row][col], "start-path")
+                    changeNormal(grid[row][col], nodeTypes.STARTPATH)
                 else if(i === path.length - 1)
-                    changeNormal(grid[row][col], "finish-path")
+                    changeNormal(grid[row][col], nodeTypes.FINISHPATH)
                 else
-                    changeNormal(grid[row][col], "path")
+                    changeNormal(grid[row][col], nodeTypes.PATH)
             }, 20 * i);
         }
     };
@@ -117,16 +121,16 @@ const Board: React.FC<BoardProps> = (props) => {
             }
             setTimeout(() => {
                 const { row, col } = nodeVisitedOrder[i];
-                const nodeRef = grid[row][col];
-                const nodeStatus = getStatus(nodeRef)
-                if(nodeStatus === 'start'){
-                    changeNormal(nodeRef, 'start-visited')
+                const node= grid[row][col];
+                const nodeStatus = getStatus(node)
+                if(nodeStatus === nodeTypes.START){
+                    changeNormal(node, nodeTypes.STARTVISITED)
                 }
-                else if(nodeStatus === 'finish'){
-                    changeNormal(nodeRef, 'finish-visited')
+                else if(nodeStatus === nodeTypes.FINISH){
+                    changeNormal(node, nodeTypes.FINISHVISITED)
                 }
                 else 
-                changeNormal(nodeRef, 'visited')
+                changeNormal(node, nodeTypes.VISITED)
             }, 10 * i);
         }
     };
@@ -140,13 +144,13 @@ const Board: React.FC<BoardProps> = (props) => {
         grid.forEach(row => {
             row.forEach(node => {
                 if(node.row === initStart.row && node.col === initStart.col){
-                    changeNormal(node, 'start')
+                    changeNormal(node, nodeTypes.START)
                 }
                 else if(node.row === initFinish.row && node.col === initFinish.col){
-                    changeNormal(node, 'finish')
+                    changeNormal(node, nodeTypes.FINISH)
                 }
                 else
-                    changeNormal(node, '')
+                    changeNormal(node, nodeTypes.UNVISITED)
             })
         })
     }

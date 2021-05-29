@@ -5,10 +5,9 @@ import React, {
     memo, 
     forwardRef, 
 } from 'react'
-
 import './Node.css'
 import { NodeProps } from '../../interfaces'
-import { getClassNameFromStatus } from '../helper'
+import * as nodeTypes from '../nodeType'
 
 
 export interface NodeHandle {
@@ -18,25 +17,22 @@ export interface NodeHandle {
 }
 
 const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref) => {
-    const [className, setClassName] = useState<string>('node')
-    const [prevState, setPrevState] = useState<string>('univisted')
-    const [status, setStatus] = useState<string>('unvisited')
+    const [prevState, setPrevState] = useState<string>(nodeTypes.UNVISITED)
+    const [status, setStatus] = useState<string>(nodeTypes.UNVISITED)
     const {isStart, isFinish, row, col} = props
 
     useEffect(() => {
-        let status = 'unvisited'
+        let status = nodeTypes.UNVISITED
         if(isStart.row === row && isStart.col === col){
-            status = 'start'
+            status = nodeTypes.START 
         }
         else if(isFinish.row === row && col === isFinish.col){
-            status = 'finish'
+            status = nodeTypes.FINISH
         }
         setStatus(status)
-        setClassName(getClassNameFromStatus(status))
     }, [isStart, isFinish, row, col])
 
     const changeStatus = (newStatus: string): void => {
-        setClassName(getClassNameFromStatus(newStatus))
         setPrevState(status)
         setStatus(newStatus)
     }
@@ -49,7 +45,7 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
         }
     })
     return (
-        <div className={className} 
+        <div className={`node ${status}`} 
             onMouseDown={(event: React.MouseEvent) => {
                 event.preventDefault()
                 props.onMouseDown(props.row, props.col)

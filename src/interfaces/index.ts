@@ -8,7 +8,8 @@ export interface algorithmNode{
     distance: number,
     previousNode: undefined | algorithmNode
     weight: number,
-    isWall: boolean 
+    isWall: boolean,
+    heuristicDistance: number 
 }
 
 
