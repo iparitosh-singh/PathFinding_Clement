@@ -1,11 +1,16 @@
 import React from "react";
+import { NodeHandle } from "../components/Board";
 
 export interface algorithmNode{
     status: string,
     row: number,
     col: number,
+    distance: number,
     previousNode: undefined | algorithmNode
+    weight: number,
+    isWall: boolean 
 }
+
 
 export interface cordinate {
     row: number, col: number
@@ -13,7 +18,7 @@ export interface cordinate {
 
 export interface returnValue {
     nodeVisitedOrder : algorithmNode[]
-    path: algorithmNode[] | undefined,
+    path: algorithmNode[],
     endReached: boolean 
 }
 
@@ -29,8 +34,16 @@ export interface NodeProps {
     col: number,
     key: number,
     onMouseDown: (row: number, col: number) => void
-    onMouseUp: (event: React.MouseEvent<HTMLDivElement>) => void
-    onMouseEnter: (row: number, col: number) => void
-    onMouseLeave: (row: number, col: number) => void
-    ref: any
+    onMouseEnter: (event: React.MouseEvent, row: number, col: number) => void
+    onMouseLeave: (event:React.MouseEvent, row: number, col: number) => void
+    ref: React.RefObject<NodeHandle> 
+}
+
+export interface algoType {
+        name: string,
+        algorithm: (
+            grid: algorithmNode[][],
+            start: algorithmNode,
+            finish: algorithmNode
+        ) => returnValue
 }

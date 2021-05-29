@@ -1,33 +1,15 @@
-import React, { useState, useImperativeHandle, useEffect } from 'react'
+import React, { 
+    useState, 
+    useImperativeHandle, 
+    useEffect,
+    memo, 
+    forwardRef, 
+} from 'react'
+
 import './Node.css'
 import { NodeProps } from '../../interfaces'
+import { getClassNameFromStatus } from '../helper'
 
-const getClassNameFromStatus = (newStatus: string): string => {
-    let newClassName = 'node'
-    switch(newStatus){
-        case 'unweighted-wall': 
-            newClassName += '-wall'
-            break
-        case 'weighted-wall':
-            newClassName += '-weighted-wall'
-            break
-        case 'visited':
-                newClassName += '-visited'
-            break
-        case 'path': 
-                newClassName += '-path'
-            break
-        case 'unVisited':
-            break
-        case 'start':
-                newClassName += '-start'
-            break
-        case 'finish':
-                newClassName += '-end'
-            break
-    }
-    return newClassName 
-}
 
 export interface NodeHandle {
     changeStatus: (status: string) => void,
@@ -72,12 +54,11 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
                 event.preventDefault()
                 props.onMouseDown(props.row, props.col)
             }}
-            onMouseEnter={() => props.onMouseEnter(props.row, props.col)}
-            onMouseUp={props.onMouseUp}
-            onMouseLeave={() => props.onMouseLeave(props.row, props.col)}
+            onMouseEnter={(event => props.onMouseEnter(event, props.row, props.col))}
+            onMouseLeave={(event) => props.onMouseLeave(event, props.row, props.col)}
         >
         </div>
     )
 }
 
-export default React.forwardRef(Node)
+export default memo(forwardRef(Node))

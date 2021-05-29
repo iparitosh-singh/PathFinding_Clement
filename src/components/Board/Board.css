@@ -1,12 +1,31 @@
 .grid {
-    max-height: 500px;
-    width: fit-content;
-    margin: 15%;
-    margin-top: 0%;
+    margin: 0 auto;
+    width: 1000px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
-
 .grid-row {
-    height: 20px;
-    width: auto;
+    width: 100%;
+    flex-shrink: 1;
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: no-wrap
+}
+
+@media only screen and (max-width: 1000px) {
+    .grid {
+        width: 800px;
+        height: 400px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .grid {
+        width: 700px;
+        height: 350px;
+    }
 }

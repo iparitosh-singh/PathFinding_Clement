@@ -1,11 +1,11 @@
 import './App.css';
 import Board from './components/Board'
 
-function App() {
-  const HEIGHT = 30, WIDTH = 40
+const App = () => {
+  const HEIGHT = 20, WIDTH = 40
   return (
     <div className="App">
-      <Board 
+      <Board
         height={HEIGHT}
         width={WIDTH}
       />
