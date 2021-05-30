@@ -38,7 +38,6 @@ export const getPath = (finish: algorithmNode) => {
     return path.reverse()
 }
 
-
 export const direction =  {
     x: [-1, 0, 1, 0],
     y: [0, 1, 0, -1],

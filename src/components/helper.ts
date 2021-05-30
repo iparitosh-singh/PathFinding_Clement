@@ -1,4 +1,4 @@
-import { BFS, Dijkstra } from '../algorithms'
+import * as algos from '../algorithms'
 import { algorithmNode, returnValue, algoType} from '../interfaces'
 import { gridNode } from './Board'
 import * as nodeTypes from './nodeType'
@@ -7,11 +7,15 @@ import * as nodeTypes from './nodeType'
 export const algorithms: algoType[] = [
     {
         name: "BFS",
-        algorithm: BFS
+        algorithm: algos.BFS
     },
     {
         name: "Dijkstra's",
-        algorithm: Dijkstra
+        algorithm: algos.Dijkstra
+    },
+    {
+        name: "A* Manhattan",
+        algorithm: algos.astarM
     }
 ]
 

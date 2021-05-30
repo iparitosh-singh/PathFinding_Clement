@@ -16,15 +16,16 @@ const dijkstras = (grid: algorithmNode[][], start: algorithmNode, finish: algori
         const closest_node = getClosestNode(priority_queue)
         if(typeof(closest_node) === 'number') break 
         const {row, col} = closest_node
+        if(closest_node.distance === Infinity) break
         visited[row][col] = true
         nodeVisitedOrder.push(closest_node)
-        if(closest_node.row === finish.row && closest_node.col === finish.col){
+        if(row === finish.row && col === finish.col){
             endReached = true
             break
         }
         const neighbours = getUnvistedNeighbours(closest_node, grid, visited)
         for(const nieghbour of neighbours){
-            nieghbour.distance = closest_node.distance + 1
+            nieghbour.distance = closest_node.distance + nieghbour.weight
             nieghbour.previousNode = closest_node
         }
     }

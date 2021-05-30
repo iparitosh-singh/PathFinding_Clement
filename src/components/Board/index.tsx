@@ -55,7 +55,7 @@ const Board: React.FC<BoardProps> = (props) => {
         setGrid(makeGrid())
     }, [makeGrid])
 
-    const handleMouseDown = useMemoizedCallback((row: number, col: number): void => {
+    const handleMouseDown = useCallback((row: number, col: number): void => {
         const node = grid[row][col]
         if(!node.ref.current) return
         const nodeState = getStatus(node) 
@@ -116,7 +116,7 @@ const Board: React.FC<BoardProps> = (props) => {
                 setTimeout(() => {
                     if (endReached) animatePath(path);
                     else alert("no path found");
-                }, 10 * i);
+                }, 15 * i);
                 return;
             }
             setTimeout(() => {
@@ -131,12 +131,12 @@ const Board: React.FC<BoardProps> = (props) => {
                 }
                 else 
                 changeNormal(node, nodeTypes.VISITED)
-            }, 10 * i);
+            }, 15 * i);
         }
     };
 
     const handleVisualize = (): void => {
-        const { endReached, path, nodeVisitedOrder } = getNodeVistedOrder(0, grid)
+        const { endReached, path, nodeVisitedOrder } = getNodeVistedOrder(selectedAlgo, grid)
         aninimateVisitedNode(nodeVisitedOrder, path, endReached)
     }
 
@@ -151,6 +151,7 @@ const Board: React.FC<BoardProps> = (props) => {
                 }
                 else
                     changeNormal(node, nodeTypes.UNVISITED)
+                node.ref.current?.setPrevState('unvisited')
             })
         })
     }

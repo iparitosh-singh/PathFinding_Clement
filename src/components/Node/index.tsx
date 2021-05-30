@@ -3,7 +3,7 @@ import React, {
     useImperativeHandle, 
     useEffect,
     memo, 
-    forwardRef, 
+    forwardRef,
 } from 'react'
 import './Node.css'
 import { NodeProps } from '../../interfaces'
@@ -11,9 +11,11 @@ import * as nodeTypes from '../nodeType'
 
 
 export interface NodeHandle {
-    changeStatus: (status: string) => void,
+    
+    changeStatus: (newStatus: string) => void,
     status: string,
-    prevState: string
+    prevState: string,
+    setPrevState:React.Dispatch<React.SetStateAction<string>>
 }
 
 const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref) => {
@@ -41,7 +43,8 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
         return {
             changeStatus,
             status,
-            prevState
+            prevState,
+            setPrevState
         }
     })
     return (

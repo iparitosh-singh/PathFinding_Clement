@@ -37,7 +37,7 @@ export interface NodeProps {
     onMouseDown: (row: number, col: number) => void
     onMouseEnter: (event: React.MouseEvent, row: number, col: number) => void
     onMouseLeave: (event:React.MouseEvent, row: number, col: number) => void
-    ref: React.RefObject<NodeHandle> 
+    ref: React.RefObject<NodeHandle>,
 }
 
 export interface algoType {
