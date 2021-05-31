@@ -4,7 +4,7 @@ export const generateVisited = (grid: algorithmNode[][]) => {
     let visited: boolean[][] = []
     for (let i = 0; i < grid.length; i++) {
         let arr : boolean[] = []
-        for (let j = 0; j < grid[i].length; j++) {
+        for (let j = 0; j < grid[0].length; j++) {
             arr.push(false)
         }
         visited.push(arr)

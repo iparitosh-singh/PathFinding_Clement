@@ -1,4 +1,3 @@
-import './App.css';
 import Board from './components/Board'
 
 const App = () => {

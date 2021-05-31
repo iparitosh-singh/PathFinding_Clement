@@ -1,10 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Node from '../Node'
+import Node from './Node'
 import './Board.css'
-import { algorithmNode, cordinate, BoardProps } from '../../interfaces'
-import {changeNormal, getStatus, getNodeVistedOrder, algorithms } from '../helper'
+import { cordinate, BoardProps } from '../../interfaces'
+import {
+    changeNormal,
+    getStatus,
+    getNodeVistedOrder,
+    algorithms,
+    aninimateVisitedNode,
+    remakingGrid,
+    actionType
+} from './helper'
 import useMemoizedCallback from '../../hooks/useMemoizedCallback'
-import * as nodeTypes from '../nodeType'
+import {nodeTypes} from './types'
 
 
 export type NodeHandle = React.ElementRef<typeof Node>
@@ -55,7 +63,7 @@ const Board: React.FC<BoardProps> = (props) => {
         setGrid(makeGrid())
     }, [makeGrid])
 
-    const handleMouseDown = useCallback((row: number, col: number): void => {
+    const handleMouseDown = useCallback((event: React.MouseEvent, row: number, col: number): void => {
         const node = grid[row][col]
         if(!node.ref.current) return
         const nodeState = getStatus(node) 
@@ -87,73 +95,25 @@ const Board: React.FC<BoardProps> = (props) => {
         if (nodePressed !== nodeTypes.START && nodePressed !== nodeTypes.FINISH) return
         const node= grid[row][col]
         const prevStatus = node.ref.current?.prevState
-        changeNormal(node, prevStatus)
+        if(prevStatus)changeNormal(node, prevStatus)
+        else changeNormal(node, nodeTypes.UNVISITED)
     }, [grid, nodePressed])
 
 
 
-    const animatePath = (path: algorithmNode[]): void => {
-        for (let i = 0; i < path.length; i++) {
-            setTimeout(() => {
-                const { row, col } = path[i];
-                if(i === 0)
-                    changeNormal(grid[row][col], nodeTypes.STARTPATH)
-                else if(i === path.length - 1)
-                    changeNormal(grid[row][col], nodeTypes.FINISHPATH)
-                else
-                    changeNormal(grid[row][col], nodeTypes.PATH)
-            }, 20 * i);
-        }
-    };
 
-    const aninimateVisitedNode = (
-        nodeVisitedOrder: algorithmNode[],
-        path: algorithmNode[],
-        endReached: boolean
-    ): void => {
-        for (let i = 0; i <= nodeVisitedOrder.length; i++) {
-            if (i === nodeVisitedOrder.length) {
-                setTimeout(() => {
-                    if (endReached) animatePath(path);
-                    else alert("no path found");
-                }, 15 * i);
-                return;
-            }
-            setTimeout(() => {
-                const { row, col } = nodeVisitedOrder[i];
-                const node= grid[row][col];
-                const nodeStatus = getStatus(node)
-                if(nodeStatus === nodeTypes.START){
-                    changeNormal(node, nodeTypes.STARTVISITED)
-                }
-                else if(nodeStatus === nodeTypes.FINISH){
-                    changeNormal(node, nodeTypes.FINISHVISITED)
-                }
-                else 
-                changeNormal(node, nodeTypes.VISITED)
-            }, 15 * i);
-        }
-    };
+    const handleReset = (): void => {
+        const cordinates = {start:initStart, finish: initFinish}
+        remakingGrid(actionType.resetFull, grid, cordinates)
+    }
+
+    const handleRedoAlgo = (): void => {
+        remakingGrid(actionType.reset, grid)
+    }
 
     const handleVisualize = (): void => {
         const { endReached, path, nodeVisitedOrder } = getNodeVistedOrder(selectedAlgo, grid)
-        aninimateVisitedNode(nodeVisitedOrder, path, endReached)
-    }
-
-    const handleReset = (): void => {
-        grid.forEach(row => {
-            row.forEach(node => {
-                if(node.row === initStart.row && node.col === initStart.col){
-                    changeNormal(node, nodeTypes.START)
-                }
-                else if(node.row === initFinish.row && node.col === initFinish.col){
-                    changeNormal(node, nodeTypes.FINISH)
-                }
-                else
-                    changeNormal(node, nodeTypes.UNVISITED)
-                node.ref.current?.setPrevState('unvisited')
-            })
-        })
+        aninimateVisitedNode(nodeVisitedOrder, path, endReached, grid)
     }
     const handleAlgoSelect = (event: React.ChangeEvent<HTMLSelectElement>): void => {
         setSelectedAlgo(parseInt(event.target.value))
@@ -162,6 +122,7 @@ const Board: React.FC<BoardProps> = (props) => {
         <div>
             <button onClick={handleVisualize}>Visualize</button>
             <button onClick={handleReset}>Reset</button>
+            <button onClick={handleRedoAlgo}>ClearAlgo</button>
             <select onChange={handleAlgoSelect} value={selectedAlgo}>
                 {algorithms.map((algo, index) => (<option key={index} value={index}>{algo.name}</option>))}
             </select>

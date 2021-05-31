@@ -1,5 +1,6 @@
 import React from "react";
 import { NodeHandle } from "../components/Board";
+import { algoName } from "../components/Board/types";
 
 export interface algorithmNode{
     status: string,
@@ -34,17 +35,18 @@ export interface NodeProps {
     row: number,
     col: number,
     key: number,
-    onMouseDown: (row: number, col: number) => void
+    onMouseDown: (event: React.MouseEvent, row: number, col: number) => void
     onMouseEnter: (event: React.MouseEvent, row: number, col: number) => void
     onMouseLeave: (event:React.MouseEvent, row: number, col: number) => void
     ref: React.RefObject<NodeHandle>,
 }
 
 export interface algoType {
-        name: string,
+        name: algoName,
         algorithm: (
             grid: algorithmNode[][],
             start: algorithmNode,
             finish: algorithmNode
         ) => returnValue
 }
+

@@ -1,11 +1,17 @@
-import {useCallback, useEffect, useRef} from 'react'
+import React, {useCallback, useEffect, useRef} from 'react'
+
+
+interface callbackInterface {
+    (event: React.MouseEvent, row: number, col: number): void
+}
 
 //pricesless hook
-const useMemoizedCallback = (callback: any, inputs: any = []) => {
+
+const useMemoizedCallback = <T extends callbackInterface>(callback: T, inputs: any = []) => {
     const callbackRef = useRef(callback)
 
-    const memoizedCallback = useCallback((...args) => {
-        return callbackRef.current(...args)
+    const memoizedCallback = useCallback((event, row, col) => {
+        return callbackRef.current(event, row, col)
     }, [])
 
     const updateCallback = useCallback(callback, [callback, ...inputs])
