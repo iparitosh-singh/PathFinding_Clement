@@ -1,6 +1,6 @@
 import React from "react";
 import { NodeHandle } from "../components/Board";
-import { algoName } from "../components/Board/types";
+import { algoName } from "../components/types";
 
 export interface algorithmNode{
     status: string,

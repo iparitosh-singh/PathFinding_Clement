@@ -1,20 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Node from './Node'
-import './Board.css'
+import Navbar from '../Navbar'
+
 import { cordinate, BoardProps } from '../../interfaces'
 import {
     changeNormal,
     getStatus,
     getNodeVistedOrder,
-    algorithms,
     aninimateVisitedNode,
     remakingGrid,
     actionType
-} from './helper'
+} from '../helper'
 import useMemoizedCallback from '../../hooks/useMemoizedCallback'
-import {nodeTypes} from './types'
-import Navbar from '../Navbar'
+import {nodeTypes} from '../types'
 
+import './Board.scss'
 
 export type NodeHandle = React.ElementRef<typeof Node>
 export interface gridNode {
@@ -121,13 +121,13 @@ const Board: React.FC<BoardProps> = (props) => {
     }
     return (
         <div>
-            <button onClick={handleVisualize}>Visualize</button>
-            <button onClick={handleReset}>Reset</button>
-            <button onClick={handleRedoAlgo}>ClearAlgo</button>
-            <select onChange={handleAlgoSelect} value={selectedAlgo}>
-                {algorithms.map((algo, index) => (<option key={index} value={index}>{algo.name}</option>))}
-            </select>
-            <Navbar />
+            <Navbar 
+                handleAlgoSelect={handleAlgoSelect}
+                handleRedoAlgo={handleRedoAlgo}
+                handleVisualize={handleVisualize}
+                handleReset={handleReset}
+                selectedAlgo={selectedAlgo}
+            />
             <div className="grid">
                 {grid.map((row, rowInd) => {
                     return (

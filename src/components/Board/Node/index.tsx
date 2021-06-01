@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import './Node.scss'
 import { NodeProps } from '../../../interfaces'
-import { nodeTypes } from '../types'
+import { nodeTypes } from '../../types'
 
 
 export interface NodeHandle {
@@ -17,7 +17,6 @@ export interface NodeHandle {
     prevState: string,
     setPrevState:React.Dispatch<React.SetStateAction<string>>
 }
-
 const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref) => {
     const [prevState, setPrevState] = useState<string>(nodeTypes.UNVISITED)
     const [status, setStatus] = useState<string>(nodeTypes.UNVISITED)

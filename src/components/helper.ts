@@ -1,6 +1,6 @@
-import * as algos from '../../algorithms'
-import { algorithmNode, returnValue, algoType, cordinate} from '../../interfaces'
-import { gridNode } from '.'
+import * as algos from '../algorithms'
+import { algorithmNode, returnValue, algoType, cordinate} from '../interfaces'
+import { gridNode } from './Board'
 import {nodeTypes, algoName} from './types'
 
 export const algorithms: algoType[] = [

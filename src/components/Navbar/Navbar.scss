@@ -1,0 +1,40 @@
+.navbar {
+    background-color:#7318B4;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    .heading {
+        display: block;
+        color: black;
+        font-family: 'Montserrat', sans-serif;
+        flex-shrink: 0;
+    }
+
+    .items {
+        flex-grow: 1;
+        display: flex;
+        justify-content: space-around;
+        max-width: 50%;
+    }
+}
+
+
+.btn {
+    border: none;
+    height: 50px;
+    width: 100px;
+    border-radius: 4px;
+    transition: ease-out 0.3s;
+    &.visualise {
+        background-color: #4CB944;
+        color: white;
+        &:hover {
+            box-shadow: inset 100px 0 0 0 #007A62;  
+        }
+    } 
+    &:hover {
+    }
+}
+

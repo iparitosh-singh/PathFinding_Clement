@@ -1,18 +1,30 @@
+$color1: #00BB59;
+$color2: #e6e6e6;
+$color3: #8B1CDC;
+$color3Dark: #7318B4;
+$color4: #f41f4f;
+$color5: #CA93F1;
+$color6:#220C32;
+
+
+
+
 .node {
     flex-grow: 1;
     flex-shrink: 1;
-    outline: 1px solid rgb(175, 216, 248);
+    outline: 1px solid $color5;
     display: inline-block;
     &.start {
         outline: 1px solid #0f0e0e;
-        background-color: rgb(51, 255, 0);
+        background-color: $color1;
     }
     &.finish {
-        background-color: red;
+        background-color: $color4;
         outline: 1px solid red;
     }
     &.wall {
-        outline: 1px solid rgb(12, 53, 71);
+        outline: 1px solid $color6;
+        background-color: $color6 ;
         animation-name: wallAnimation;
         animation-duration: 0.3s;
         animation-timing-function: ease-out;
@@ -36,7 +48,7 @@
     }
     &.visited {
         animation-name: visitedAnimated;
-        outline: 1px solid rgb(175, 217, 248);
+        outline: 2px solid $color3Dark;
         animation-duration: 1.5s;
         animation-timing-function: ease-out;
         animation-delay: 0;
@@ -57,15 +69,12 @@
 @keyframes wallAnimation {
     0% {
         transform: scale(.3);
-        background-color: rgb(12, 53, 71);
     }
     50% {
         transform: scale(1.2);
-        background-color: rgb(12, 53, 71);
     }
     100% {
         transform: scale(1.0);
-        background-color: rgb(12, 53, 71);
     }
 }
 
@@ -84,7 +93,7 @@
     }
     100% {
         transform: scale(1.0);
-        background-color: rgba(0, 190, 218, 0.75);
+        background-color: $color3;
     }
 }
 

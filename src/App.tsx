@@ -1,4 +1,5 @@
 import Board from './components/Board'
+import './App.scss'
 
 const App = () => {
   const HEIGHT = 20, WIDTH = 40
