@@ -1,4 +1,3 @@
-
 export enum nodeTypes {
     WALL = 'wall',
     START = 'start',

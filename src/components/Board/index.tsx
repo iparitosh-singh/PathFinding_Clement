@@ -13,6 +13,7 @@ import {
 } from './helper'
 import useMemoizedCallback from '../../hooks/useMemoizedCallback'
 import {nodeTypes} from './types'
+import Navbar from '../Navbar'
 
 
 export type NodeHandle = React.ElementRef<typeof Node>
@@ -126,6 +127,7 @@ const Board: React.FC<BoardProps> = (props) => {
             <select onChange={handleAlgoSelect} value={selectedAlgo}>
                 {algorithms.map((algo, index) => (<option key={index} value={index}>{algo.name}</option>))}
             </select>
+            <Navbar />
             <div className="grid">
                 {grid.map((row, rowInd) => {
                     return (
