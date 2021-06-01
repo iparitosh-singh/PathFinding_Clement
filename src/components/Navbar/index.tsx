@@ -9,6 +9,7 @@ interface NavProps {
 const Navbar: React.FC<NavProps> = () => {
     return (
         <div>
+            Hello World
         </div>
     )
     
