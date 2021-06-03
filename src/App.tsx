@@ -2,7 +2,8 @@ import Board from './components/Board'
 import './App.scss'
 
 const App = () => {
-  const HEIGHT = 20, WIDTH = 40
+  // ratio = 5 /12
+  const HEIGHT = 20, WIDTH = 48 
   return (
     <div className="App">
       <Board

@@ -1,8 +1,14 @@
-.grid {
-    margin: 0 auto;
-    width: 1000px;
-    height: 500px;
+.container {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.grid {
+    width: 100%;
+    height: 625px;
+    display: flex;
+    padding: 0 10px;
+    box-sizing: border-box;
     flex-direction: column;
     justify-content: flex-start;
 }
@@ -13,8 +19,13 @@
     flex-grow: 1;
     display: flex;
     justify-content: flex-start;
-    flex-wrap: no-wrap
+    flex-wrap: no-wrap;
+    > * {
+        width: 100%;
+    }
 }
+
+
 
 @media only screen and (max-width: 1000px) {
     .grid {

@@ -19,17 +19,19 @@ const Navbar: React.FC<NavProps> = (props) => {
         selectedAlgo
     } = props
     return (
-        <div className='navbar'>
-            <div className='heading'>PathFinding</div>
-            <div className="items">
-                <button className="btn visualise" onClick={handleVisualize}>Visualize</button>
-                <button className="btn" onClick={handleReset}>Reset</button>
-                <button className="btn" onClick={handleRedoAlgo}>ClearAlgo</button>
-                <select onChange={handleAlgoSelect} defaultValue={selectedAlgo}>
-                    {algorithms.map((algo, index) => (<option key={index} value={index}>{algo.name}</option>))}
-                </select>
+        <>
+            <div className='navbar'>
+                <div className='heading'>PathFinding</div>
+                <div className="items">
+                    <button className="btn visualise" onClick={handleVisualize}>Visualize</button>
+                    <button className="btn" onClick={handleReset}>Reset</button>
+                    <button className="btn" onClick={handleRedoAlgo}>ClearAlgo</button>
+                    <select onChange={handleAlgoSelect} defaultValue={selectedAlgo} className='btn' >
+                        {algorithms.map((algo, index) => (<option key={index} value={index}>{algo.name}</option>))}
+                    </select>
+                </div>
             </div>
-        </div>
+        </>
     )
 
 }

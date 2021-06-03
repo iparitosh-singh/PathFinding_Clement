@@ -86,7 +86,7 @@ const makeAlgorithmGrid = (grid: gridNode[][]): {
 const animatePath = (
     path: algorithmNode[],
     grid: gridNode[][],
-    framRate: number = 25 
+    framRate: number = 50 
 ): void => {
     for (let i = 0; i < path.length; i++) {
         setTimeout(() => {
@@ -106,7 +106,7 @@ export const aninimateVisitedNode = (
     path: algorithmNode[],
     endReached: boolean,
     grid: gridNode[][],
-    framRate: number = 15
+    framRate: number = 20
 ): void => {
     for (let i = 0; i <= nodeVisitedOrder.length; i++) {
         if (i === nodeVisitedOrder.length) {

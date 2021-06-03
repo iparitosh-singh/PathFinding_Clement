@@ -31,17 +31,16 @@ const Board: React.FC<BoardProps> = (props) => {
     const [nodePressed, setNodePressed] = useState<string>('')
     const [selectedAlgo, setSelectedAlgo] = useState<number>(0)
     const [grid, setGrid] = useState<gridNode[][]>([])
-    const [initStart] = useState<cordinate>({
+    const [initStart, setInitStart] = useState<cordinate>({
         row: Math.floor(height / 2),
         col: Math.floor(width / 4)
     })
-    const [initFinish] = useState<cordinate>({
+    const [initFinish, setInitFinsish] = useState<cordinate>({
         row: Math.floor(height / 2),
         col: Math.floor(3 * width / 4)
     })
 
     const makeGrid = useCallback((): gridNode[][] => {
-        const { height, width } = props
         const newGrid: gridNode[][] = []
         for (let i = 0; i < height; i++) {
             const gridRow: gridNode[] = []
@@ -58,11 +57,19 @@ const Board: React.FC<BoardProps> = (props) => {
             newGrid.push(gridRow)
         }
         return newGrid
-    }, [props])
+    }, [height, width])
 
     useEffect(() => {
         setGrid(makeGrid())
-    }, [makeGrid])
+        setInitStart({
+            row: Math.floor(height / 2),
+            col: Math.floor(width / 4)
+        })
+        setInitFinsish({
+            row: Math.floor(height / 2),
+            col: Math.floor(3 * width / 4)
+        })
+    }, [makeGrid, height, width])
 
     const handleMouseDown = useCallback((event: React.MouseEvent, row: number, col: number): void => {
         const node = grid[row][col]
@@ -120,39 +127,44 @@ const Board: React.FC<BoardProps> = (props) => {
         setSelectedAlgo(parseInt(event.target.value))
     }
     return (
-        <div>
-            <Navbar 
+        <>
+            <Navbar
                 handleAlgoSelect={handleAlgoSelect}
                 handleRedoAlgo={handleRedoAlgo}
                 handleVisualize={handleVisualize}
                 handleReset={handleReset}
                 selectedAlgo={selectedAlgo}
             />
-            <div className="grid">
-                {grid.map((row, rowInd) => {
-                    return (
-                        <div className='grid-row' key={rowInd}>
-                            {row.map((node, colInd) => {
-                                const { row, col, ref } = node
-                                return (
-                                    <Node
-                                        isStart={initStart}
-                                        isFinish={initFinish}
-                                        ref={ref}
-                                        key={colInd}
-                                        row={row}
-                                        col={col}
-                                        onMouseDown={handleMouseDown}
-                                        onMouseEnter={handleMouseEnter}
-                                        onMouseLeave={handleMouseLeave}
-                                    ></Node>
-                                )
-                            })}
-                        </div>
-                    )
-                })}
+            <div className="container">
+                <div>
+                    This is the discription text of the algorithms
+                </div>
+                <div className="grid">
+                    {grid.map((row, rowInd) => {
+                        return (
+                            <div className='grid-row' key={rowInd}>
+                                {row.map((node, colInd) => {
+                                    const { row, col, ref } = node
+                                    return (
+                                        <Node
+                                            isStart={initStart}
+                                            isFinish={initFinish}
+                                            ref={ref}
+                                            key={colInd}
+                                            row={row}
+                                            col={col}
+                                            onMouseDown={handleMouseDown}
+                                            onMouseEnter={handleMouseEnter}
+                                            onMouseLeave={handleMouseLeave}
+                                        ></Node>
+                                    )
+                                })}
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 

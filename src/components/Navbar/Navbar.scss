@@ -1,6 +1,8 @@
+$unvisitedWall: #2972FF;
+
 .navbar {
-    background-color:#7318B4;
     height: 50px;
+    outline: $unvisitedWall;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -23,18 +25,18 @@
 
 .btn {
     border: none;
-    height: 50px;
+    height: 30px;
     width: 100px;
     border-radius: 4px;
     transition: ease-out 0.3s;
+    font-family: 'Montserrat', sans-serif;
+    background-color: $unvisitedWall;
+    color: white;
     &.visualise {
-        background-color: #4CB944;
-        color: white;
         &:hover {
-            box-shadow: inset 100px 0 0 0 #007A62;  
+            background-color: #22E02D;
+            color: black ;
         }
     } 
-    &:hover {
-    }
 }
 

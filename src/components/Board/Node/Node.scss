@@ -1,30 +1,31 @@
 $color1: #00BB59;
-$color2: #e6e6e6;
-$color3: #8B1CDC;
-$color3Dark: #7318B4;
 $color4: #f41f4f;
-$color5: #CA93F1;
-$color6:#220C32;
+
+
+$red: #FF3180;
+$green: #22E02D;
+$vistedBetween: #16BAC5;
+$pathFinal:#FF9500; 
+$wall:#2c3550;
+$unvisitedWall: #2972FF;
 
 
 
 
 .node {
-    flex-grow: 1;
-    flex-shrink: 1;
-    outline: 1px solid $color5;
+    outline: 1px solid lighten($unvisitedWall, 20%);
     display: inline-block;
     &.start {
         outline: 1px solid #0f0e0e;
-        background-color: $color1;
+        background-color: $green;
     }
     &.finish {
-        background-color: $color4;
+        background-color: $red;
         outline: 1px solid red;
     }
     &.wall {
-        outline: 1px solid $color6;
-        background-color: $color6 ;
+        outline: 1px solid darken($wall, 50%);
+        background-color: $wall;
         animation-name: wallAnimation;
         animation-duration: 0.3s;
         animation-timing-function: ease-out;
@@ -35,21 +36,15 @@ $color6:#220C32;
         animation-play-state: running;
     }
     &.path {
-        animation: path 1.5s;
+        outline: 1px solid darken($pathFinal, 10%);
+        animation: path 1s;
         animation-timing-function: ease-out;
-        background-color: rgb(218, 255, 10);
-        outline: 1px solid yellowgreen;
-        &.start {
-            outline: 1px solid blue;
-        }
-        &.finish {
-            outline: 1px solid red;
-        }
+        background-color: $pathFinal;
     }
     &.visited {
         animation-name: visitedAnimated;
-        outline: 2px solid $color3Dark;
-        animation-duration: 1.5s;
+        outline: 1px solid darken($unvisitedWall, 15%);
+        animation-duration: 1s;
         animation-timing-function: ease-out;
         animation-delay: 0;
         animation-direction: alternate;
@@ -81,19 +76,22 @@ $color6:#220C32;
 @keyframes visitedAnimated {
     0% {
         transform: scale(.3);
-        background-color: rgba(0, 0, 66, 0.75);
+        bacgground-color: rgba(0, 0, 66, 0.75);
         border-radius: 100%;
     }
     50% {
         background-color: rgba(17, 104, 217, 0.75);
+        background-color: adjust-hue($unvisitedWall, $degrees: -20deg);
+        border-radius: 100%;
     }
     75% {
         transform: scale(1.2);
-        background-color: rgba(0, 217, 159, 0.75);
+        background-color: adjust-hue($unvisitedWall, -50deg);
+        border-radius: 100%;
     }
     100% {
         transform: scale(1.0);
-        background-color: $color3;
+        background-color: $unvisitedWall;
     }
 }
 
@@ -137,20 +135,18 @@ $color6:#220C32;
 
 @keyframes path {
     0% {
-        transform: scale(1.2);
+        transform: scale(1);
         background-color: rgba(2, 2, 2, 0.75);
-        border-radius: 50%;
     }
     50% {
-        transform: scale(1);
-        background-color: rgba(117, 255, 4, 0.75);
+        transform: scale(1.2);
+        background-color: adjust-hue($pathFinal, 50deg);
     }
     75% {
-        transform: scale(1.2);
-        background-color: rgba(58, 245, 11, 0.856)
+        transform: scale(1.1);
+        background-color: adjust-hue($pathFinal, 20deg);
     }
     100% {
         transform: scale(1.0);
-        /* background-color: rgba(250, 250, 10, 0.75); */
     }
 }
