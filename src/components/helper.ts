@@ -83,52 +83,47 @@ const makeAlgorithmGrid = (grid: gridNode[][]): {
     return { nodeGrid, start, finish }
 }
 
-const animatePath = (
+const animate = (node: gridNode, type: string, frameRate: number = 40)=> {
+    return new Promise<void>(resolve => setTimeout(() => {
+        changeNormal(node, type)
+        resolve()
+    }, frameRate))
+}
+
+
+export const animatePath = async (
     path: algorithmNode[],
     grid: gridNode[][],
-    framRate: number = 50 
-): void => {
+    framRate: number = 40 
+): Promise<void> => {
     for (let i = 0; i < path.length; i++) {
-        setTimeout(() => {
-            const { row, col } = path[i];
-            if (i === 0)
-                changeNormal(grid[row][col], nodeTypes.STARTPATH)
-            else if (i === path.length - 1)
-                changeNormal(grid[row][col], nodeTypes.FINISHPATH)
-            else
-                changeNormal(grid[row][col], nodeTypes.PATH)
-        }, framRate * i);
+        const { row, col } = path[i];
+        if (i === 0)
+            await animate(grid[row][col], nodeTypes.STARTPATH, framRate)
+        else if (i === path.length - 1)
+            await animate(grid[row][col], nodeTypes.FINISHPATH, framRate)
+        else
+            await animate(grid[row][col], nodeTypes.PATH, framRate)
     }
 }
 
-export const aninimateVisitedNode = (
+export const aninimateVisitedNode = async (
     nodeVisitedOrder: algorithmNode[],
-    path: algorithmNode[],
-    endReached: boolean,
     grid: gridNode[][],
-    framRate: number = 20
-): void => {
-    for (let i = 0; i <= nodeVisitedOrder.length; i++) {
-        if (i === nodeVisitedOrder.length) {
-            setTimeout(() => {
-                if (endReached) animatePath(path, grid);
-                else alert("no path found");
-            }, framRate * i);
-            return;
+    framRate: number = 5
+): Promise<void> => {
+    for (let i = 0; i < nodeVisitedOrder.length; i++) {
+        const { row, col } = nodeVisitedOrder[i];
+        const node = grid[row][col];
+        const nodeStatus = getStatus(node)
+        if (nodeStatus === nodeTypes.START) {
+            await animate(node, nodeTypes.STARTVISITED, framRate)
         }
-        setTimeout(() => {
-            const { row, col } = nodeVisitedOrder[i];
-            const node = grid[row][col];
-            const nodeStatus = getStatus(node)
-            if (nodeStatus === nodeTypes.START) {
-                changeNormal(node, nodeTypes.STARTVISITED)
-            }
-            else if (nodeStatus === nodeTypes.FINISH) {
-                changeNormal(node, nodeTypes.FINISHVISITED)
-            }
-            else
-                changeNormal(node, nodeTypes.VISITED)
-        }, framRate * i);
+        else if (nodeStatus === nodeTypes.FINISH) {
+            await animate(node, nodeTypes.FINISHVISITED, framRate)
+        }
+        else
+            await animate(node, nodeTypes.VISITED, framRate)
     }
 }
 

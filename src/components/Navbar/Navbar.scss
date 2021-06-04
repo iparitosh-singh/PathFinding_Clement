@@ -1,17 +1,17 @@
-$unvisitedWall: #2972FF;
-
+@import '../../variables.module.scss';
 .navbar {
+    background-color: white;
+    border: 0 0 20px;
+    border-color: $buttonNormal;
     height: 50px;
-    outline: $unvisitedWall;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px;
     .heading {
         display: block;
-        color: black;
-        font-family: 'Montserrat', sans-serif;
-        flex-shrink: 0;
+        font-family: 'Poppins', sans-serif;
+        color: $wall;
+        padding: 5px;
     }
 
     .items {
@@ -25,18 +25,40 @@ $unvisitedWall: #2972FF;
 
 .btn {
     border: none;
-    height: 30px;
-    width: 100px;
+    width: 15ch;
     border-radius: 4px;
     transition: ease-out 0.3s;
-    font-family: 'Montserrat', sans-serif;
-    background-color: $unvisitedWall;
-    color: white;
-    &.visualise {
-        &:hover {
-            background-color: #22E02D;
-            color: black ;
+    font-family: 'Poppins', sans-serif;
+    background-color: white;
+    padding:  5px 0;
+    background-color: $buttonNormal;
+    color: $unvisitedWall;
+        &.visualize{
+            background-color: $unvisitedWall;
+            color: white;
+            &.running {
+                background-color: $red;
+                color: $wall;
+            }
+            &:hover {
+                background-color: $green;
+            }
         }
-    } 
+        &:hover {
+            background-color: $unvisitedWall;
+            color: $wall;
+        }
+        &:active {
+            background-color: $green;
+        }
+
 }
 
+.dropDown {
+    outline: none;
+    border-radius: 4px;
+    padding:  5px 0;
+    background-color: $buttonNormal;
+    color: $wall;
+    font-family: 'Poppins', sans-serif;
+}

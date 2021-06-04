@@ -3,7 +3,7 @@ import './App.scss'
 
 const App = () => {
   // ratio = 5 /12
-  const HEIGHT = 20, WIDTH = 48 
+  const HEIGHT = 30, WIDTH = 72 
   return (
     <div className="App">
       <Board

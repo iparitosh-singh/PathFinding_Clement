@@ -2,6 +2,14 @@ import React from "react";
 import { NodeHandle } from "../components/Board";
 import { algoName } from "../components/types";
 
+export interface NavProps {
+    handleReset: () => void,
+    handleAlgoSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void
+    handleVisualize: () => void,
+    handleRedoAlgo: () => void,
+    selectedAlgo: number
+    isRunning: boolean
+}
 export interface algorithmNode{
     status: string,
     row: number,

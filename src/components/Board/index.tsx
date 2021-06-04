@@ -9,7 +9,8 @@ import {
     getNodeVistedOrder,
     aninimateVisitedNode,
     remakingGrid,
-    actionType
+    actionType,
+    animatePath
 } from '../helper'
 import useMemoizedCallback from '../../hooks/useMemoizedCallback'
 import {nodeTypes} from '../types'
@@ -28,6 +29,7 @@ export interface gridNode {
 
 const Board: React.FC<BoardProps> = (props) => {
     const { height, width } = props
+    const [isRunning, setIsRunning] = useState<boolean>(false)
     const [nodePressed, setNodePressed] = useState<string>('')
     const [selectedAlgo, setSelectedAlgo] = useState<number>(0)
     const [grid, setGrid] = useState<gridNode[][]>([])
@@ -71,7 +73,8 @@ const Board: React.FC<BoardProps> = (props) => {
         })
     }, [makeGrid, height, width])
 
-    const handleMouseDown = useCallback((event: React.MouseEvent, row: number, col: number): void => {
+    const handleMouseDown = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
+        if(isRunning) return
         const node = grid[row][col]
         if(!node.ref.current) return
         const nodeState = getStatus(node) 
@@ -81,10 +84,10 @@ const Board: React.FC<BoardProps> = (props) => {
         if (nodeState !== nodeTypes.START && nodeState !== nodeTypes.FINISH) {
             changeNormal(node, nodeTypes.WALL)
         }
-    }, [setNodePressed, grid])
+    }, [])
 
     const handleMouseEnter = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
-        if (event.buttons !== 1) return
+        if (event.buttons !== 1 || isRunning) return
         const node = grid[row][col]
         if(!node.ref.current) return
         const nodeState = getStatus(node) 
@@ -96,16 +99,16 @@ const Board: React.FC<BoardProps> = (props) => {
         else {
             node.ref.current.changeStatus(nodePressed)
         }
-    }, [grid, nodePressed])
+    }, [])
 
     const handleMouseLeave = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
-        if (event.buttons !== 1) return
+        if (event.buttons !== 1 || isRunning) return
         if (nodePressed !== nodeTypes.START && nodePressed !== nodeTypes.FINISH) return
         const node= grid[row][col]
         const prevStatus = node.ref.current?.prevState
         if(prevStatus)changeNormal(node, prevStatus)
         else changeNormal(node, nodeTypes.UNVISITED)
-    }, [grid, nodePressed])
+    }, [])
 
 
 
@@ -119,9 +122,14 @@ const Board: React.FC<BoardProps> = (props) => {
         remakingGrid(actionType.reset, grid)
     }
 
-    const handleVisualize = (): void => {
+    const handleVisualize = async (): Promise<void> => {
+        if(isRunning) return
+        setIsRunning(true)
         const { endReached, path, nodeVisitedOrder } = getNodeVistedOrder(selectedAlgo, grid)
-        aninimateVisitedNode(nodeVisitedOrder, path, endReached, grid)
+        await aninimateVisitedNode(nodeVisitedOrder, grid, 5)
+        if(endReached)
+            await animatePath(path, grid, 40)
+        setIsRunning(false)
     }
     const handleAlgoSelect = (event: React.ChangeEvent<HTMLSelectElement>): void => {
         setSelectedAlgo(parseInt(event.target.value))
@@ -134,6 +142,7 @@ const Board: React.FC<BoardProps> = (props) => {
                 handleVisualize={handleVisualize}
                 handleReset={handleReset}
                 selectedAlgo={selectedAlgo}
+                isRunning={isRunning}
             />
             <div className="container">
                 <div>

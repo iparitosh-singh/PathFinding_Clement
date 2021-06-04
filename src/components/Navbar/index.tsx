@@ -1,34 +1,29 @@
 import React from 'react'
 import {algorithms} from '../helper'
+import {NavProps} from '../../interfaces'
 import './Navbar.scss'
 
-interface NavProps {
-    
-    handleReset: () => void,
-    handleAlgoSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void
-    handleVisualize: () => void,
-    handleRedoAlgo: () => void,
-    selectedAlgo: number
-}
 const Navbar: React.FC<NavProps> = (props) => {
     const {
         handleAlgoSelect,
         handleRedoAlgo,
         handleReset,
         handleVisualize,
-        selectedAlgo
+        selectedAlgo,
+        isRunning
     } = props
+    const running = isRunning ? 'running' : ''
     return (
         <>
             <div className='navbar'>
-                <div className='heading'>PathFinding</div>
+                <div className='heading'>PathFinding Visualizer</div>
                 <div className="items">
-                    <button className="btn visualise" onClick={handleVisualize}>Visualize</button>
-                    <button className="btn" onClick={handleReset}>Reset</button>
-                    <button className="btn" onClick={handleRedoAlgo}>ClearAlgo</button>
-                    <select onChange={handleAlgoSelect} defaultValue={selectedAlgo} className='btn' >
+                    <select onChange={handleAlgoSelect} defaultValue={selectedAlgo} className='dropDown' >
                         {algorithms.map((algo, index) => (<option key={index} value={index}>{algo.name}</option>))}
                     </select>
+                    <button className={"btn visualize " + running} onClick={handleVisualize}>Visualize</button>
+                    <button className="btn" onClick={handleRedoAlgo}>ClearAlgo</button>
+                    <button className="btn" onClick={handleReset}>Reset</button>
                 </div>
             </div>
         </>

@@ -5,7 +5,7 @@ interface callbackInterface {
     (event: React.MouseEvent, row: number, col: number): void
 }
 
-//pricesless hook
+//bomb hook
 
 const useMemoizedCallback = <T extends callbackInterface>(callback: T, inputs: any = []) => {
     const callbackRef = useRef(callback)

@@ -1,7 +1,14 @@
+@import '../../variables.module.scss';
 .container {
+    background-color: white;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 20px 20px 0 0;
+    padding-bottom: 1.5%;
+    height: fit-content;
+    
 }
 .grid {
     width: 100%;
@@ -13,8 +20,10 @@
     justify-content: flex-start;
 }
 
+
 .grid-row {
     width: 100%;
+    height: 20px;
     flex-shrink: 1;
     flex-grow: 1;
     display: flex;
@@ -25,18 +34,3 @@
     }
 }
 
-
-
-@media only screen and (max-width: 1000px) {
-    .grid {
-        width: 800px;
-        height: 400px;
-    }
-}
-
-@media screen and (max-width: 800px) {
-    .grid {
-        width: 700px;
-        height: 350px;
-    }
-}

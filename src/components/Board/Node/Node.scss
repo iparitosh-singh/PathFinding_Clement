@@ -1,16 +1,4 @@
-$color1: #00BB59;
-$color4: #f41f4f;
-
-
-$red: #FF3180;
-$green: #22E02D;
-$vistedBetween: #16BAC5;
-$pathFinal:#FF9500; 
-$wall:#2c3550;
-$unvisitedWall: #2972FF;
-
-
-
+@import '../../../variables.module.scss';
 
 .node {
     outline: 1px solid lighten($unvisitedWall, 20%);
@@ -76,11 +64,9 @@ $unvisitedWall: #2972FF;
 @keyframes visitedAnimated {
     0% {
         transform: scale(.3);
-        bacgground-color: rgba(0, 0, 66, 0.75);
         border-radius: 100%;
     }
     50% {
-        background-color: rgba(17, 104, 217, 0.75);
         background-color: adjust-hue($unvisitedWall, $degrees: -20deg);
         border-radius: 100%;
     }
@@ -136,15 +122,13 @@ $unvisitedWall: #2972FF;
 @keyframes path {
     0% {
         transform: scale(1);
-        background-color: rgba(2, 2, 2, 0.75);
+        border-radius: 50%;
     }
     50% {
         transform: scale(1.2);
-        background-color: adjust-hue($pathFinal, 50deg);
     }
     75% {
         transform: scale(1.1);
-        background-color: adjust-hue($pathFinal, 20deg);
     }
     100% {
         transform: scale(1.0);
