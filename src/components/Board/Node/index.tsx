@@ -54,6 +54,7 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
             }}
             onMouseEnter={(event => props.onMouseEnter(event, props.row, props.col))}
             onMouseLeave={(event) => props.onMouseLeave(event, props.row, props.col)}
+            onMouseUp ={(event) => props.onMouseUp(event, props.row, props.col)}
         >
         </div>
     )

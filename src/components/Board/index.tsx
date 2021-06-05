@@ -11,6 +11,7 @@ import {
     remakingGrid,
     actionType,
     animatePath,
+    checkSpecialNode,
 } from '../helper'
 import useMemoizedCallback from '../../hooks/useMemoizedCallback'
 import {nodeTypes} from '../types'
@@ -80,39 +81,57 @@ const Board: React.FC<BoardProps> = (props) => {
         if(!node.ref.current) return
         const nodeState = getStatus(node) 
         if (nodeState){
-           setNodePressed(nodeState)
-        }
-        if (nodeState !== nodeTypes.START && nodeState !== nodeTypes.FINISH && nodeState !==nodeTypes.STARTPATH && nodeState !== nodeTypes.FINISHPATH) {
-            console.log('herec')
-            changeNormal(node, nodeTypes.WALL)
+            setNodePressed(nodeState)
+            if (checkSpecialNode(nodeState)) {
+                changeNormal(node, nodeTypes.WALL)
+            }
         }
     }, [grid, isRunning, setNodePressed ])
+
+    const handleMouseUp = useMemoizedCallback((event: React.MouseEvent, row: number, col:number) => {
+        setNodePressed(nodeTypes.NODE)
+    }, [])
 
     const handleMouseEnter = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
         if (event.buttons !== 1 || isRunning) return
         const node = grid[row][col]
         if (!node.ref.current) return
         const nodeState = getStatus(node)
-        if (nodePressed === nodeTypes.UNVISITED || nodePressed === nodeTypes.VISITED) {
-            if (nodeState !== nodeTypes.START && nodeState !== nodeTypes.FINISH) {
+        if(!nodeState) return
+        if (checkSpecialNode(nodePressed)) {
+            if (checkSpecialNode(nodeState)) {
                 changeNormal(grid[row][col], nodeTypes.WALL)
             }
         }
-        else if (nodePressed === nodeTypes.STARTPATH || nodePressed === nodeTypes.FINISHPATH) {
-            console.log('here')
-        }
         else {
-            node.ref.current.changeStatus(nodePressed)
+            changeNormal(node, nodePressed)
         }
     }, [grid, isRunning, nodePressed])
 
     const handleMouseLeave = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
         if (event.buttons !== 1 || isRunning) return
-        if (nodePressed !== nodeTypes.START && nodePressed !== nodeTypes.FINISH) return
+        if (checkSpecialNode(nodePressed)) return
         const node= grid[row][col]
         const prevStatus = node.ref.current?.prevState
-        if(prevStatus)changeNormal(node, prevStatus)
-        else changeNormal(node, nodeTypes.UNVISITED)
+        if(row === 0 || row === height - 1 || col === 0 || col === width - 1){
+            const Element = event.relatedTarget as Element
+            if(Element.className === 'container' || Element.className === 'grid-row'){
+                return
+            }
+            else {
+                if (prevStatus)
+                    changeNormal(node, prevStatus)
+                else
+                    changeNormal(node, nodeTypes.UNVISITED)
+            }
+        }
+        else {
+            if (prevStatus)
+                changeNormal(node, prevStatus)
+            else
+                changeNormal(node, nodeTypes.UNVISITED)
+        }
+        
     }, [grid, isRunning, nodePressed])
 
 
@@ -150,7 +169,9 @@ const Board: React.FC<BoardProps> = (props) => {
                 <div>
                     This is the discription text of the algorithms
                 </div>
-                <div className="grid">
+                <div className="grid"
+                onMouseLeave={() => {setNodePressed(nodeTypes.UNVISITED)}}
+                >
                     {grid.map((row, rowInd) => {
                         return (
                             <div className='grid-row' key={rowInd}>
@@ -167,6 +188,7 @@ const Board: React.FC<BoardProps> = (props) => {
                                             onMouseDown={handleMouseDown}
                                             onMouseEnter={handleMouseEnter}
                                             onMouseLeave={handleMouseLeave}
+                                            onMouseUp={handleMouseUp}
                                         ></Node>
                                     )
                                 })}

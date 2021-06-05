@@ -107,24 +107,41 @@ export const animatePath = async (
     }
 }
 
+export const checkSpecialNode = (nodePressed: string): boolean =>{
+    let notStart = (
+        nodePressed !== nodeTypes.START && 
+        nodePressed !== nodeTypes.STARTPATH &&
+        nodePressed !== nodeTypes.STARTVISITED
+    )
+    let notFinish = (
+        nodePressed !== nodeTypes.FINISH && 
+        nodePressed !== nodeTypes.FINISHPATH &&
+        nodePressed !== nodeTypes.FINISHVISITED
+    )
+        return notStart && notFinish
+}
 export const aninimateVisitedNode = async (
     nodeVisitedOrder: algorithmNode[],
     grid: gridNode[][],
     framRate: number = 5
 ): Promise<void> => {
+        console.log(grid)
     for (let i = 0; i < nodeVisitedOrder.length; i++) {
         const { row, col } = nodeVisitedOrder[i];
         const node = grid[row][col];
-        await animate(node, nodeTypes.VISITEDCURRENT, framRate * 2)
         const nodeStatus = getStatus(node)
         if (nodeStatus === nodeTypes.START) {
+            await animate(node, nodeTypes.VISITEDCURRENT, framRate * 2)
             await animate(node, nodeTypes.STARTVISITED, framRate)
         }
         else if (nodeStatus === nodeTypes.FINISH) {
+            await animate(node, nodeTypes.VISITEDCURRENT, framRate * 2)
             await animate(node, nodeTypes.FINISHVISITED, framRate)
         }
-        else
+        else if(nodeStatus === nodeTypes.UNVISITED){
+            await animate(node, nodeTypes.VISITEDCURRENT, framRate * 2)
             await animate(node, nodeTypes.VISITED, framRate)
+        }
         
     }
 }

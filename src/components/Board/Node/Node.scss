@@ -1,22 +1,43 @@
 @import '../../../variables.module.scss';
 .node {
     outline: 1px solid lighten($unvisitedWall, 20%);
+    box-sizing: border-box;
     display: inline-block;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    animation-play-state: running;
+    &.wall {
+        outline: 1px solid darken($wall, 50%);
+        background-color: $wall;
+        animation-name: wallAnimation;
+        animation-duration: 0.3s;
+    }
+    &.visited {
+        animation-name: visitedAnimated;
+        outline: 1px solid darken($unvisitedWall, 15%);
+        &.current {
+            animation: none;
+            border-radius: 50%;
+            background-color: yellow;
+        }
+    }
     &.start {
         outline: none;
         background-image: url('../../../assets/icons/triangletwo-right.svg');
         background-position: center;
         background-repeat: no-repeat;
         background-size: contain;
-        animation-name: specialNodes;
-        animation-duration: 2.0s;
-        animation-timing-function: ease-out;
-        animation-delay: 0;
-        animation-direction: alternate;
-        animation-iteration-count: 1;
-        animation-fill-mode: forwards;
-        animation-play-state: running;
+        animation-name: node;
+        &.visited {
+            animation-name: visitedAnimated;
+            outline: 1px solid darken($unvisitedWall, 15%);
+        }
     }
+
     &.finish {
         outline: none;
         background-image: url('../../../assets/icons/circle.svg');
@@ -24,51 +45,23 @@
         background-repeat: no-repeat;
         background-size: contain;
         animation-name: specialNodes;
-        animation-duration: 2.0s;
-        animation-timing-function: ease-out;
-        animation-delay: 0;
-        animation-direction: alternate;
-        animation-iteration-count: 1;
-        animation-fill-mode: forwards;
-        animation-play-state: running;
-    }
-
-    &.wall {
-        outline: 1px solid darken($wall, 50%);
-        background-color: $wall;
-        animation-name: wallAnimation;
-        animation-duration: 0.3s;
-        animation-timing-function: ease-out;
-        animation-delay: 0;
-        animation-direction: alternate;
-        animation-iteration-count: 1;
-        animation-fill-mode: forwards;
-        animation-play-state: running;
-    }
-    &.path {
-        outline: 1px solid darken($pathFinal, 10%);
-        animation: path 1s;
-        animation-timing-function: ease-out;
-        background-color: $pathFinal;
-    }
-    &.visited {
-        animation-name: visitedAnimated;
-        outline: 1px solid darken($unvisitedWall, 15%);
-        animation-duration: 1s;
-        animation-timing-function: ease-out;
-        animation-delay: 0;
-        animation-direction: alternate;
-        animation-iteration-count: 1;
-        animation-fill-mode: forwards;
-        animation-play-state: running;
-        &.current {
-            animation: none;
-            border-radius: 50%;
-            background-color: yellow;
+        &.visited {
+            animation-name: visitedAnimated;
+            outline: 1px solid darken($unvisitedWall, 15%);
+        }
+        &.path {
+            animation-name: path;
+            outline: 1px solid darken($pathFinal, 10%);
         }
     }
+    &.path {
+        background-color: $pathFinal;
+        outline: 1px solid darken($pathFinal, 10%);
+        animation-name: path ;
+        animation-duration: 1.5s;
+        animation-timing-function: linear;
+    }
 }
-
 // animations
 @keyframes wallAnimation {
     0% {
@@ -104,7 +97,7 @@
 
 @keyframes specialNodes{
     0% {
-        transform: scale(.3);
+        transform: scale(.8);
     }
 
     50% {
@@ -113,57 +106,15 @@
 
     100% {
         transform: scale(1.0);
-    }
-}
-
-@keyframes visitedAnimatedStart {
-    0% {
-        transform: scale(.3);
-        background-color: rgba(0, 0, 66, 0.75);
-        border-radius: 50%;
-    }
-    50% {
-        background-color: rgba(253, 59, 237, 0.75);
-    }
-    75% {
-        transform: scale(1.2);
-        background-color: rgba(165, 9, 82, 0.75)
-    }
-    100% {
-        transform: scale(1.0);
-        background-color: rgba(140, 19, 221, 0.75);
-    }
-}
-
-@keyframes visitedAnimatedFinish {
-    0% {
-        transform: scale(.3);
-        background-color: rgba(0, 0, 66, 0.75);
-        border-radius: 50%;
-    }
-    50% {
-        background-color: rgba(119, 0, 255, 0.75);
-    }
-    75% {
-        transform: scale(1.2);
-        background-color: rgba(204, 34, 204, 0.75)
-    }
-    100% {
-        transform: scale(1.0);
-        background-color: rgba(218, 0, 145, 0.75);
     }
 }
 
 @keyframes path {
     0% {
-        transform: scale(1);
-        border-radius: 50%;
+        transform: scale(0.6);
     }
     50% {
         transform: scale(1.2);
-    }
-    75% {
-        transform: scale(1.1);
     }
     100% {
         transform: scale(1.0);

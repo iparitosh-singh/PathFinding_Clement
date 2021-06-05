@@ -43,6 +43,7 @@ export interface NodeProps {
     onMouseDown: (event: React.MouseEvent, row: number, col: number) => void
     onMouseEnter: (event: React.MouseEvent, row: number, col: number) => void
     onMouseLeave: (event:React.MouseEvent, row: number, col: number) => void
+    onMouseUp: (event:React.MouseEvent, row: number, col: number) => void
     ref: React.RefObject<NodeHandle>,
 }
 
