@@ -1,6 +1,6 @@
 import React from "react";
-import { gridNode, NodeHandle } from "../components/Board";
-import { algoName } from "../components/types";
+import { NodeHandle } from "../components/Board";
+import { algoName } from "./types";
 
 export interface NavProps {
     handleReset: () => void,

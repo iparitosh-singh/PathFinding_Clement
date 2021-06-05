@@ -7,19 +7,19 @@ import React, {
 } from 'react'
 import './Node.scss'
 import { NodeProps } from '../../../interfaces'
-import { nodeTypes } from '../../types'
+import { nodeTypes } from '../../../interfaces/types'
 
 
 export interface NodeHandle {
     
-    changeStatus: (newStatus: string) => void,
-    status: string,
-    prevState: string,
-    setPrevState:React.Dispatch<React.SetStateAction<string>>
+    changeStatus: (newStatus: nodeTypes) => void,
+    status: nodeTypes,
+    prevState: nodeTypes,
+    setPrevState:React.Dispatch<React.SetStateAction<nodeTypes>>
 }
 const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref) => {
-    const [prevState, setPrevState] = useState<string>(nodeTypes.UNVISITED)
-    const [status, setStatus] = useState<string>(nodeTypes.UNVISITED)
+    const [prevState, setPrevState] = useState<nodeTypes>(nodeTypes.UNVISITED)
+    const [status, setStatus] = useState<nodeTypes>(nodeTypes.UNVISITED)
     const {isStart, isFinish, row, col} = props
     useEffect(() => {
         let status = nodeTypes.UNVISITED
@@ -33,7 +33,7 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
     }, [row, col, isStart, isFinish])
 
 
-    const changeStatus = (newStatus: string): void => {
+    const changeStatus = (newStatus: nodeTypes): void => {
         setPrevState(status)
         setStatus(newStatus)
     }

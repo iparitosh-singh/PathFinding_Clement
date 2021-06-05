@@ -14,7 +14,7 @@ import {
     checkSpecialNode,
 } from '../helper'
 import useMemoizedCallback from '../../hooks/useMemoizedCallback'
-import {nodeTypes} from '../types'
+import {nodeTypes} from '../../interfaces/types'
 
 import './Board.scss'
 
@@ -28,10 +28,11 @@ export interface gridNode {
 }
 
 
+
 const Board: React.FC<BoardProps> = (props) => {
     const { height, width } = props
     const [isRunning, setIsRunning] = useState<boolean>(false)
-    const [nodePressed, setNodePressed] = useState<string>('')
+    const [nodePressed, setNodePressed] = useState<nodeTypes>(nodeTypes.NODE)
     const [selectedAlgo, setSelectedAlgo] = useState<number>(0)
     const [grid, setGrid] = useState<gridNode[][]>([])
     const [initStart, setInitStart] = useState({
@@ -81,7 +82,7 @@ const Board: React.FC<BoardProps> = (props) => {
         if(!node.ref.current) return
         const nodeState = getStatus(node) 
         if (nodeState){
-            setNodePressed(nodeState)
+           setNodePressed(nodeState)
             if (checkSpecialNode(nodeState)) {
                 changeNormal(node, nodeTypes.WALL)
             }

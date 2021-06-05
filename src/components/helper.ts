@@ -1,7 +1,7 @@
 import * as algos from '../algorithms'
 import { algorithmNode, returnValue, algoType} from '../interfaces'
 import { gridNode } from './Board'
-import {nodeTypes, algoName} from './types'
+import {nodeTypes, algoName} from '../interfaces/types'
 
 export const algorithms: algoType[] = [
     {
@@ -32,14 +32,15 @@ const getNewAlgoNode = (row: number, col: number) : algorithmNode => {
     }
 }
 
-export const getStatus = (gridNode: gridNode): string | undefined => {
+export const getStatus = (gridNode: gridNode): nodeTypes | undefined => {
     const nodeRef = gridNode.ref
     return nodeRef.current?.status
 }
+
 export const changeNormal = (
     node: gridNode,
-    status: string,
-    prevStatus?: string
+    status: nodeTypes,
+    prevStatus?: nodeTypes 
 ): void => {
     const nodeRef = node.ref
     nodeRef.current?.changeStatus(status)
@@ -83,9 +84,9 @@ const makeAlgorithmGrid = (grid: gridNode[][]): {
     return { nodeGrid, start, finish }
 }
 
-const animate = (node: gridNode, type: string, frameRate: number = 40)=> {
+const animate = (node: gridNode, status: nodeTypes, frameRate: number = 40)=> {
     return new Promise<void>(resolve => setTimeout(() => {
-        changeNormal(node, type)
+        changeNormal(node, status)
         resolve()
     }, frameRate))
 }
@@ -158,7 +159,7 @@ export enum actionType {
     clearPath
 }
 
-const changeNode = (node: gridNode, status: string, action: actionType) => {
+const changeNode = (node: gridNode, status: nodeTypes, action: actionType) => {
     if(status === nodeTypes.WALL){
         if(action === actionType.resetFull){
             changeNormal(node, nodeTypes.UNVISITED)
