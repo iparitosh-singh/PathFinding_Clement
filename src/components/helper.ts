@@ -1,5 +1,5 @@
 import * as algos from '../algorithms'
-import { algorithmNode, returnValue, algoType, cordinate} from '../interfaces'
+import { algorithmNode, returnValue, algoType} from '../interfaces'
 import { gridNode } from './Board'
 import {nodeTypes, algoName} from './types'
 
@@ -92,8 +92,8 @@ const animate = (node: gridNode, type: string, frameRate: number = 40)=> {
 
 
 export const animatePath = async (
-    path: algorithmNode[],
-    grid: gridNode[][],
+    path:Array<algorithmNode>,
+    grid: Array<Array<gridNode>>,
     framRate: number = 40 
 ): Promise<void> => {
     for (let i = 0; i < path.length; i++) {
@@ -115,6 +115,7 @@ export const aninimateVisitedNode = async (
     for (let i = 0; i < nodeVisitedOrder.length; i++) {
         const { row, col } = nodeVisitedOrder[i];
         const node = grid[row][col];
+        await animate(node, nodeTypes.VISITEDCURRENT, framRate * 2)
         const nodeStatus = getStatus(node)
         if (nodeStatus === nodeTypes.START) {
             await animate(node, nodeTypes.STARTVISITED, framRate)
@@ -124,6 +125,7 @@ export const aninimateVisitedNode = async (
         }
         else
             await animate(node, nodeTypes.VISITED, framRate)
+        
     }
 }
 
@@ -151,7 +153,7 @@ const changeNode = (node: gridNode, status: string, action: actionType) => {
         status === nodeTypes.FINISHVISITED
     ) {
         if(action === actionType.resetFull){
-            changeNormal(node, nodeTypes.UNVISITED)
+            changeNormal(node, nodeTypes.FINISH)
         }
         else if(action === actionType.reset) {
             changeNormal(node, nodeTypes.FINISH, nodeTypes.UNVISITED)
@@ -166,7 +168,7 @@ const changeNode = (node: gridNode, status: string, action: actionType) => {
         status === nodeTypes.STARTVISITED
     ) {
         if(action === actionType.resetFull){
-            changeNormal(node, nodeTypes.UNVISITED)
+            changeNormal(node, nodeTypes.START)
         }
         else if(action === actionType.reset) {
             changeNormal(node, nodeTypes.START, nodeTypes.UNVISITED)
@@ -188,7 +190,6 @@ const changeNode = (node: gridNode, status: string, action: actionType) => {
 export const remakingGrid = (
     action: actionType,
     grid: gridNode[][],
-    cordinates?: { start: cordinate, finish: cordinate},
 ): void => {
     for (const row of grid) {
         for (const node of row) {
@@ -196,13 +197,19 @@ export const remakingGrid = (
                 changeNode(node, node.ref.current.status, action)
         }
     }
-    if(action === actionType.resetFull){
-        if(!!cordinates){
-            const {start, finish} = cordinates
-            const startNode= grid[start.row][start.col]
-            const finishNode = grid[finish.row][finish.col]
-            changeNormal(startNode, nodeTypes.START)
-            changeNormal(finishNode, nodeTypes.FINISH)
-        }
+}
+
+export const refreshAlgo = async (
+    grid: Array<Array<gridNode>>,
+    selectedAlgo: number
+): Promise<void> => {
+    const data = getNodeVistedOrder(selectedAlgo, grid)
+    const visitedNodes = aninimateVisitedNode(data.nodeVisitedOrder, grid, 5)
+    const path = animatePath(data.path, grid)
+    if(data.endReached){
+        Promise.all([visitedNodes, path])
+    }
+    else {
+        await visitedNodes
     }
 }

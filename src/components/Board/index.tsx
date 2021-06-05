@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Node from './Node'
 import Navbar from '../Navbar'
 
-import { cordinate, BoardProps } from '../../interfaces'
+import { BoardProps } from '../../interfaces'
 import {
     changeNormal,
     getStatus,
@@ -10,7 +10,7 @@ import {
     aninimateVisitedNode,
     remakingGrid,
     actionType,
-    animatePath
+    animatePath,
 } from '../helper'
 import useMemoizedCallback from '../../hooks/useMemoizedCallback'
 import {nodeTypes} from '../types'
@@ -33,14 +33,15 @@ const Board: React.FC<BoardProps> = (props) => {
     const [nodePressed, setNodePressed] = useState<string>('')
     const [selectedAlgo, setSelectedAlgo] = useState<number>(0)
     const [grid, setGrid] = useState<gridNode[][]>([])
-    const [initStart, setInitStart] = useState<cordinate>({
+    const [initStart, setInitStart] = useState({
         row: Math.floor(height / 2),
         col: Math.floor(width / 4)
     })
-    const [initFinish, setInitFinsish] = useState<cordinate>({
+    const [initFinish, setInitFinsish] = useState({
         row: Math.floor(height / 2),
         col: Math.floor(3 * width / 4)
     })
+
 
     const makeGrid = useCallback((): gridNode[][] => {
         const newGrid: gridNode[][] = []
@@ -78,28 +79,32 @@ const Board: React.FC<BoardProps> = (props) => {
         const node = grid[row][col]
         if(!node.ref.current) return
         const nodeState = getStatus(node) 
-        if (nodeState)
-            setNodePressed(nodeState)
-
-        if (nodeState !== nodeTypes.START && nodeState !== nodeTypes.FINISH) {
+        if (nodeState){
+           setNodePressed(nodeState)
+        }
+        if (nodeState !== nodeTypes.START && nodeState !== nodeTypes.FINISH && nodeState !==nodeTypes.STARTPATH && nodeState !== nodeTypes.FINISHPATH) {
+            console.log('herec')
             changeNormal(node, nodeTypes.WALL)
         }
-    }, [])
+    }, [grid, isRunning, setNodePressed ])
 
     const handleMouseEnter = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
         if (event.buttons !== 1 || isRunning) return
         const node = grid[row][col]
-        if(!node.ref.current) return
-        const nodeState = getStatus(node) 
-        if (nodePressed !== nodeTypes.START && nodePressed !== nodeTypes.FINISH) {
+        if (!node.ref.current) return
+        const nodeState = getStatus(node)
+        if (nodePressed === nodeTypes.UNVISITED || nodePressed === nodeTypes.VISITED) {
             if (nodeState !== nodeTypes.START && nodeState !== nodeTypes.FINISH) {
                 changeNormal(grid[row][col], nodeTypes.WALL)
             }
         }
+        else if (nodePressed === nodeTypes.STARTPATH || nodePressed === nodeTypes.FINISHPATH) {
+            console.log('here')
+        }
         else {
             node.ref.current.changeStatus(nodePressed)
         }
-    }, [])
+    }, [grid, isRunning, nodePressed])
 
     const handleMouseLeave = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
         if (event.buttons !== 1 || isRunning) return
@@ -108,14 +113,11 @@ const Board: React.FC<BoardProps> = (props) => {
         const prevStatus = node.ref.current?.prevState
         if(prevStatus)changeNormal(node, prevStatus)
         else changeNormal(node, nodeTypes.UNVISITED)
-    }, [])
+    }, [grid, isRunning, nodePressed])
 
 
-
-
-    const handleReset = (): void => {
-        const cordinates = {start:initStart, finish: initFinish}
-        remakingGrid(actionType.resetFull, grid, cordinates)
+    const clearWallAndPath = (): void => {
+        remakingGrid(actionType.resetFull, grid)
     }
 
     const handleRedoAlgo = (): void => {
@@ -126,7 +128,7 @@ const Board: React.FC<BoardProps> = (props) => {
         if(isRunning) return
         setIsRunning(true)
         const { endReached, path, nodeVisitedOrder } = getNodeVistedOrder(selectedAlgo, grid)
-        await aninimateVisitedNode(nodeVisitedOrder, grid, 5)
+        await aninimateVisitedNode(nodeVisitedOrder, grid, 2)
         if(endReached)
             await animatePath(path, grid, 40)
         setIsRunning(false)
@@ -140,7 +142,7 @@ const Board: React.FC<BoardProps> = (props) => {
                 handleAlgoSelect={handleAlgoSelect}
                 handleRedoAlgo={handleRedoAlgo}
                 handleVisualize={handleVisualize}
-                handleReset={handleReset}
+                handleReset={clearWallAndPath}
                 selectedAlgo={selectedAlgo}
                 isRunning={isRunning}
             />

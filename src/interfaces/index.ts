@@ -1,5 +1,5 @@
 import React from "react";
-import { NodeHandle } from "../components/Board";
+import { gridNode, NodeHandle } from "../components/Board";
 import { algoName } from "../components/types";
 
 export interface NavProps {
@@ -22,9 +22,6 @@ export interface algorithmNode{
 }
 
 
-export interface cordinate {
-    row: number, col: number
-}
 
 export interface returnValue {
     nodeVisitedOrder : algorithmNode[]
@@ -38,8 +35,8 @@ export interface BoardProps {
 }
 
 export interface NodeProps {
-    isStart: cordinate,
-    isFinish: cordinate,
+    isStart: {row: number, col: number}
+    isFinish: {row: number, col: number}
     row: number,
     col: number,
     key: number,
@@ -57,4 +54,3 @@ export interface algoType {
             finish: algorithmNode
         ) => returnValue
 }
-

@@ -23,14 +23,14 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
     const {isStart, isFinish, row, col} = props
     useEffect(() => {
         let status = nodeTypes.UNVISITED
-        if(isStart.row === row && isStart.col === col){
-            status = nodeTypes.START 
+        if (isStart.row === row && isStart.col === col) {
+            status = nodeTypes.START
         }
-        else if(isFinish.row === row && col === isFinish.col){
+        else if (isFinish.row === row && col === isFinish.col) {
             status = nodeTypes.FINISH
         }
         setStatus(status)
-    }, [isStart, isFinish, row, col])
+    }, [row, col, isStart, isFinish])
 
 
     const changeStatus = (newStatus: string): void => {

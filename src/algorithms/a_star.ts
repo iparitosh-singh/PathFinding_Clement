@@ -42,6 +42,11 @@ const getAllunvisited = (grid: algorithmNode[][]): algorithmNode[] => {
 
 const getClosestNode = (queue: algorithmNode[]) : algorithmNode | number => {
     queue.sort((a, b) => {
+        let distanceA = a.heuristicDistance + a.distance
+        let distanceB = b.heuristicDistance + b.distance
+        if(distanceA === distanceB){
+            return a.heuristicDistance - b.heuristicDistance
+        }
         return (
             (a.heuristicDistance + a.distance) - (b.distance + b.heuristicDistance)
         )

@@ -36,12 +36,15 @@
         &.visualize{
             background-color: $unvisitedWall;
             color: white;
+            &:hover {
+                background-color: $green;
+            }
             &.running {
                 background-color: $red;
                 color: $wall;
-            }
-            &:hover {
-                background-color: $green;
+                &:hover{
+                    background-color: $red;
+                }
             }
         }
         &:hover {

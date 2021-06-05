@@ -1,16 +1,38 @@
 @import '../../../variables.module.scss';
-
 .node {
     outline: 1px solid lighten($unvisitedWall, 20%);
     display: inline-block;
     &.start {
-        outline: 1px solid #0f0e0e;
-        background-color: $green;
+        outline: none;
+        background-image: url('../../../assets/icons/triangletwo-right.svg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        animation-name: specialNodes;
+        animation-duration: 2.0s;
+        animation-timing-function: ease-out;
+        animation-delay: 0;
+        animation-direction: alternate;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        animation-play-state: running;
     }
     &.finish {
-        background-color: $red;
-        outline: 1px solid red;
+        outline: none;
+        background-image: url('../../../assets/icons/circle.svg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        animation-name: specialNodes;
+        animation-duration: 2.0s;
+        animation-timing-function: ease-out;
+        animation-delay: 0;
+        animation-direction: alternate;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        animation-play-state: running;
     }
+
     &.wall {
         outline: 1px solid darken($wall, 50%);
         background-color: $wall;
@@ -39,11 +61,10 @@
         animation-iteration-count: 1;
         animation-fill-mode: forwards;
         animation-play-state: running;
-        &.start {
-            animation-name: visitedAnimatedStart;
-        }
-        &.finish {
-            animation-name: visitedAnimatedFinish;
+        &.current {
+            animation: none;
+            border-radius: 50%;
+            background-color: yellow;
         }
     }
 }
@@ -78,6 +99,20 @@
     100% {
         transform: scale(1.0);
         background-color: $unvisitedWall;
+    }
+}
+
+@keyframes specialNodes{
+    0% {
+        transform: scale(.3);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1.0);
     }
 }
 

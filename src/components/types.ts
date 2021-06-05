@@ -4,6 +4,7 @@ export enum nodeTypes {
     FINISH = 'finish',
     NODE = 'node',
     VISITED = 'visited',
+    VISITEDCURRENT = 'visited current',
     UNVISITED = 'unvisted',
     STARTVISITED = 'visited start',
     FINISHVISITED = 'visited finish',
