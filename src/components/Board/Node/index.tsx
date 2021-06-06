@@ -1,17 +1,17 @@
-import React, { 
-    useState, 
-    useImperativeHandle, 
+import React, {
+    useState,
+    useImperativeHandle,
     useEffect,
-    memo, 
+    memo,
     forwardRef,
 } from 'react'
 import './Node.scss'
 import { NodeProps } from '../../../interfaces'
-import { nodeTypes } from '../../../interfaces/types'
+import { nodeTypes } from '../../../interfaces/constants'
 
 
 export interface NodeHandle {
-    
+
     changeStatus: (newStatus: nodeTypes) => void,
     status: nodeTypes,
     prevState: nodeTypes,
@@ -47,16 +47,18 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
         }
     })
     return (
-        <div className={`node ${status}`} 
+        <div className="node-container"
             onMouseDown={(event: React.MouseEvent) => {
                 event.preventDefault()
                 props.onMouseDown(event, props.row, props.col)
             }}
             onMouseEnter={(event => props.onMouseEnter(event, props.row, props.col))}
             onMouseLeave={(event) => props.onMouseLeave(event, props.row, props.col)}
-            onMouseUp ={(event) => props.onMouseUp(event, props.row, props.col)}
+
         >
-        </div>
+        <div className={`node ${status}`}
+        >
+        </div></div>
     )
 }
 

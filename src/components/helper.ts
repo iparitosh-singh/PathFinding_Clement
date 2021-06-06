@@ -2,7 +2,7 @@ import * as algos from '../algorithms'
 
 import { algorithmNode, returnValue, algoType} from '../interfaces'
 import { gridNode } from './Board'
-import {nodeTypes, algoName, startNodes ,finishNodes } from '../interfaces/types'
+import {nodeTypes, algoName, startNodes ,finishNodes } from '../interfaces/constants'
 
 export const algorithms: algoType[] = [
     {
@@ -45,10 +45,7 @@ export const changeNormal = (
 ): void => {
     const nodeRef = node.ref
     nodeRef.current?.changeStatus(status)
-    if(!prevStatus){
-        nodeRef.current?.setPrevState(nodeTypes.UNVISITED)
-    }
-    else {
+    if(prevStatus){
         nodeRef.current?.setPrevState(prevStatus)
     }
 }
@@ -147,7 +144,7 @@ const setDirection = async (current: gridNode, next: gridNode, type: nodeTypes, 
 export const animatePath = async (
     path:Array<algorithmNode>,
     grid: Array<Array<gridNode>>,
-    framRate: number = 40 
+    framRate: number = 10 
 ): Promise<void> => {
     for (let i = 0; i < path.length; i++) {
         const { row, col } = path[i];
@@ -223,7 +220,7 @@ const changeNode = (node: gridNode, status: nodeTypes, action: actionType) => {
     }
     else if (finishNodes.includes(status)) {
         if(action === actionType.resetFull){
-            changeNormal(node, nodeTypes.FINISH)
+            changeNormal(node, nodeTypes.FINISH, nodeTypes.UNVISITED)
         }
         else if(action === actionType.reset) {
             changeNormal(node, nodeTypes.FINISH, nodeTypes.UNVISITED)
@@ -234,7 +231,7 @@ const changeNode = (node: gridNode, status: nodeTypes, action: actionType) => {
     }
     else if (startNodes.includes(status)) {
         if(action === actionType.resetFull){
-            changeNormal(node, nodeTypes.START)
+            changeNormal(node, nodeTypes.START, nodeTypes.UNVISITED)
         }
         else if(action === actionType.reset) {
             changeNormal(node, nodeTypes.START, nodeTypes.UNVISITED)

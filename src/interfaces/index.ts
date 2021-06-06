@@ -1,6 +1,6 @@
 import React from "react";
 import { NodeHandle } from "../components/Board";
-import { algoName } from "./types";
+import { algoName } from "./constants";
 
 export interface NavProps {
     handleReset: () => void,
@@ -18,7 +18,7 @@ export interface algorithmNode{
     previousNode: undefined | algorithmNode
     weight: number,
     isWall: boolean,
-    heuristicDistance: number 
+    heuristicDistance: number
 }
 
 
@@ -26,7 +26,7 @@ export interface algorithmNode{
 export interface returnValue {
     nodeVisitedOrder : algorithmNode[]
     path: algorithmNode[],
-    endReached: boolean 
+    endReached: boolean
 }
 
 export interface BoardProps {
@@ -43,7 +43,7 @@ export interface NodeProps {
     onMouseDown: (event: React.MouseEvent, row: number, col: number) => void
     onMouseEnter: (event: React.MouseEvent, row: number, col: number) => void
     onMouseLeave: (event:React.MouseEvent, row: number, col: number) => void
-    onMouseUp: (event:React.MouseEvent, row: number, col: number) => void
+    onMouseUp?: () => void
     ref: React.RefObject<NodeHandle>,
 }
 

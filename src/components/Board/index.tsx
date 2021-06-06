@@ -13,8 +13,9 @@ import {
     animatePath,
     checkSpecialNode,
 } from '../helper'
+
 import useMemoizedCallback from '../../hooks/useMemoizedCallback'
-import {nodeTypes} from '../../interfaces/types'
+import {nodeTypes} from '../../interfaces/constants'
 
 import './Board.scss'
 
@@ -76,22 +77,22 @@ const Board: React.FC<BoardProps> = (props) => {
         })
     }, [makeGrid, height, width])
 
-    const handleMouseDown = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
+    const handleMouseDown = useMemoizedCallback((_: React.MouseEvent, row: number, col: number): void => {
         if(isRunning) return
         const node = grid[row][col]
         if(!node.ref.current) return
-        const nodeState = getStatus(node) 
+        const nodeState = getStatus(node)
         if (nodeState){
            setNodePressed(nodeState)
             if (checkSpecialNode(nodeState)) {
-                changeNormal(node, nodeTypes.WALL)
+                if(nodeState === nodeTypes.WALL) 
+                    changeNormal(node, nodeTypes.UNVISITED)
+                else 
+                    changeNormal(node, nodeTypes.WALL)
             }
         }
-    }, [grid, isRunning, setNodePressed ])
-
-    const handleMouseUp = useMemoizedCallback((event: React.MouseEvent, row: number, col:number) => {
-        setNodePressed(nodeTypes.NODE)
     }, [])
+
 
     const handleMouseEnter = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
         if (event.buttons !== 1 || isRunning) return
@@ -105,35 +106,33 @@ const Board: React.FC<BoardProps> = (props) => {
             }
         }
         else {
-            changeNormal(node, nodePressed)
+            if(checkSpecialNode(nodeState)){
+                changeNormal(node, nodePressed)
+            }
         }
-    }, [grid, isRunning, nodePressed])
+    }, [])
+
+    const handleMouseUp = useCallback((): void => {
+        setNodePressed(nodeTypes.NODE)
+    }, [])
 
     const handleMouseLeave = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
         if (event.buttons !== 1 || isRunning) return
         if (checkSpecialNode(nodePressed)) return
-        const node= grid[row][col]
+        const node = grid[row][col]
         const prevStatus = node.ref.current?.prevState
-        if(row === 0 || row === height - 1 || col === 0 || col === width - 1){
-            const Element = event.relatedTarget as Element
-            if(Element.className === 'container' || Element.className === 'grid-row'){
-                return
-            }
-            else {
-                if (prevStatus)
-                    changeNormal(node, prevStatus)
-                else
-                    changeNormal(node, nodeTypes.UNVISITED)
-            }
+        const element = event.relatedTarget as HTMLElement
+        const classNames = element.className.split(' ')
+        if (classNames[0] !== 'node' || classNames[1] === 'start' || classNames[1] === 'finish'){
+            setNodePressed(nodeTypes.UNVISITED)
+            return
         }
-        else {
-            if (prevStatus)
-                changeNormal(node, prevStatus)
-            else
-                changeNormal(node, nodeTypes.UNVISITED)
-        }
-        
-    }, [grid, isRunning, nodePressed])
+
+        if (prevStatus)
+            changeNormal(node, prevStatus)
+        else
+            changeNormal(node, nodeTypes.UNVISITED)
+    }, [])
 
 
     const clearWallAndPath = (): void => {

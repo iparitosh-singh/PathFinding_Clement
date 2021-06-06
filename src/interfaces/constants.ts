@@ -13,15 +13,15 @@ export enum nodeTypes {
     PATHLEFT = 'path left',
     PATHUP = 'path up',
     PATHDOWN = 'path down',
-    STARTPATHLEFT = 'path start left',
-    STARTPATHRIGHT= 'path start right',
-    STARTPATHDOWN= 'path start down',
-    STARTPATHUP= 'path start up',
+    STARTPATHLEFT = 'start path left',
+    STARTPATHRIGHT= 'start path right',
+    STARTPATHDOWN= 'start path down',
+    STARTPATHUP= 'start path up',
 
-    FINISHPATHLEFT = 'path finish left',
-    FINISHPATHRIGHT= 'path finish right',
-    FINISHPATHUP= 'path finish up',
-    FINISHPATHDOWN= 'path finish down',
+    FINISHPATHLEFT = 'finish path left',
+    FINISHPATHRIGHT= 'finish path right',
+    FINISHPATHUP= 'finish path up',
+    FINISHPATHDOWN= 'finish path down',
 }
 
 export enum algoName {
