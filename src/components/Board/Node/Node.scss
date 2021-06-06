@@ -31,10 +31,26 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: contain;
-        animation-name: none;
+        animation-name: specialNodes;
         &.visited {
             animation-name: visitedAnimated;
             outline: 1px solid darken($unvisitedWall, 15%);
+        }
+        &.path {
+            animation-name: path;
+            outline: 1px solid darken($pathFinal, 10%);
+            &.left {
+                background-image: url('../../../assets/icons/triangletwo-left.svg');
+            }
+            &.right{
+                background-image: url('../../../assets/icons/triangletwo-right.svg');
+            }
+            &.up {
+                background-image: url('../../../assets/icons/triangletwo-up.svg');
+            }
+            &.down {
+                background-image: url('../../../assets/icons/triangletwo-down.svg');
+            }
         }
     }
 
@@ -44,7 +60,7 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: contain;
-        animation-name: none;
+        animation-name: specialNodes;
         &.visited {
             animation-name: visitedAnimated;
             outline: 1px solid darken($unvisitedWall, 15%);
@@ -52,6 +68,18 @@
         &.path {
             animation-name: path;
             outline: 1px solid darken($pathFinal, 10%);
+            &.left {
+                background-image: url('../../../assets/icons/triangletwo-left.svg');
+            }
+            &.right{
+                background-image: url('../../../assets/icons/triangletwo-right.svg');
+            }
+            &.up {
+                background-image: url('../../../assets/icons/triangletwo-up.svg');
+            }
+            &.down {
+                background-image: url('../../../assets/icons/triangletwo-down.svg');
+            }
         }
     }
     &.path {
@@ -60,6 +88,18 @@
         animation-name: path ;
         animation-duration: 1.5s;
         animation-timing-function: linear;
+            &.left {
+                background-image: url('../../../assets/icons/triangletwo-left.svg');
+            }
+            &.right{
+                background-image: url('../../../assets/icons/triangletwo-right.svg');
+            }
+            &.up {
+                background-image: url('../../../assets/icons/triangletwo-up.svg');
+            }
+            &.down {
+                background-image: url('../../../assets/icons/triangletwo-down.svg');
+            }
     }
 }
 // animations

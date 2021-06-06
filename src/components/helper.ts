@@ -1,7 +1,8 @@
 import * as algos from '../algorithms'
+
 import { algorithmNode, returnValue, algoType} from '../interfaces'
 import { gridNode } from './Board'
-import {nodeTypes, algoName} from '../interfaces/types'
+import {nodeTypes, algoName, startNodes ,finishNodes } from '../interfaces/types'
 
 export const algorithms: algoType[] = [
     {
@@ -91,6 +92,57 @@ const animate = (node: gridNode, status: nodeTypes, frameRate: number = 40)=> {
     }, frameRate))
 }
 
+const setDirection = async (current: gridNode, next: gridNode, type: nodeTypes, frameRate: number): Promise<void> => {
+    if(current.row === next.row){
+        //going left
+        if(current.col > next.col){
+            if(type === nodeTypes.START){
+                await animate(current, nodeTypes.STARTPATHLEFT, frameRate)
+            }
+            else if(type === nodeTypes.FINISH){
+                await animate(next, nodeTypes.FINISHPATHLEFT, frameRate)
+            }
+            else 
+                await animate(current, nodeTypes.PATHLEFT, frameRate)
+        }
+        //going right
+        else {
+            if (type === nodeTypes.START) {
+                await animate(current, nodeTypes.STARTPATHRIGHT, frameRate)
+            }
+            else if (type === nodeTypes.FINISH) {
+                await animate(next, nodeTypes.FINISHPATHRIGHT, frameRate)
+            }
+            else
+                await animate(current, nodeTypes.PATHRIGHT, frameRate)
+        }
+    }
+    else {
+        //going up
+        if(current.row > next.row){
+            if(type === nodeTypes.START){
+                await animate(current, nodeTypes.STARTPATHUP, frameRate)
+            }
+            //for finish node we check prev node
+            else if(type === nodeTypes.FINISH){
+                await animate(next, nodeTypes.FINISHPATHUP, frameRate)
+            }
+            else
+            await animate(current, nodeTypes.PATHUP, frameRate)
+        }
+        //going down
+        else {
+            if(type === nodeTypes.START){
+                await animate(current, nodeTypes.STARTPATHDOWN, frameRate)
+            }
+            else if(type === nodeTypes.FINISH){
+                await animate(next, nodeTypes.FINISHPATHDOWN, frameRate)
+            }
+            else 
+            await animate(current, nodeTypes.PATHDOWN, frameRate)
+        }
+    }
+}
 
 export const animatePath = async (
     path:Array<algorithmNode>,
@@ -99,48 +151,45 @@ export const animatePath = async (
 ): Promise<void> => {
     for (let i = 0; i < path.length; i++) {
         const { row, col } = path[i];
-        if (i === 0)
-            await animate(grid[row][col], nodeTypes.STARTPATH, framRate)
-        else if (i === path.length - 1)
-            await animate(grid[row][col], nodeTypes.FINISHPATH, framRate)
-        else
+        if (i === 0){
+            const current = grid[path[i].row][path[i].col]
+            const next = grid[path[1].row][path[1].col]
+            
+            await setDirection(current, next, nodeTypes.START, framRate)
+        }
+        else if (i === path.length - 1){
+            const prev = grid[path[i - 1].row][path[i - 1].col]
+            const curr = grid[path[i].row][path[i].col]
+            await setDirection(prev, curr, nodeTypes.FINISH, framRate)
+        }
+        else{
+            const current = grid[path[i].row][path[i].col]
+            const next = grid[path[i + 1].row][path[i + 1].col]
+            await setDirection(current, next, nodeTypes.VISITED, framRate)
             await animate(grid[row][col], nodeTypes.PATH, framRate)
+        }
     }
 }
 
-export const checkSpecialNode = (nodePressed: string): boolean =>{
-    let notStart = (
-        nodePressed !== nodeTypes.START && 
-        nodePressed !== nodeTypes.STARTPATH &&
-        nodePressed !== nodeTypes.STARTVISITED
-    )
-    let notFinish = (
-        nodePressed !== nodeTypes.FINISH && 
-        nodePressed !== nodeTypes.FINISHPATH &&
-        nodePressed !== nodeTypes.FINISHVISITED
-    )
-        return notStart && notFinish
-}
 export const aninimateVisitedNode = async (
     nodeVisitedOrder: algorithmNode[],
     grid: gridNode[][],
     framRate: number = 5
 ): Promise<void> => {
-        console.log(grid)
     for (let i = 0; i < nodeVisitedOrder.length; i++) {
         const { row, col } = nodeVisitedOrder[i];
         const node = grid[row][col];
         const nodeStatus = getStatus(node)
         if (nodeStatus === nodeTypes.START) {
-            await animate(node, nodeTypes.VISITEDCURRENT, framRate * 2)
+            await animate(node, nodeTypes.VISITEDCURRENT, framRate)
             await animate(node, nodeTypes.STARTVISITED, framRate)
         }
         else if (nodeStatus === nodeTypes.FINISH) {
-            await animate(node, nodeTypes.VISITEDCURRENT, framRate * 2)
+            await animate(node, nodeTypes.VISITEDCURRENT, framRate)
             await animate(node, nodeTypes.FINISHVISITED, framRate)
         }
         else if(nodeStatus === nodeTypes.UNVISITED){
-            await animate(node, nodeTypes.VISITEDCURRENT, framRate * 2)
+            await animate(node, nodeTypes.VISITEDCURRENT, framRate)
             await animate(node, nodeTypes.VISITED, framRate)
         }
         
@@ -159,17 +208,20 @@ export enum actionType {
     clearPath
 }
 
+export const checkSpecialNode = (nodePressed: nodeTypes): boolean =>{
+    let notStart = !startNodes.includes(nodePressed)
+    let notFinish = !finishNodes.includes(nodePressed)
+    
+        return notStart && notFinish
+}
+
 const changeNode = (node: gridNode, status: nodeTypes, action: actionType) => {
     if(status === nodeTypes.WALL){
         if(action === actionType.resetFull){
             changeNormal(node, nodeTypes.UNVISITED)
         }
     }
-    else if (
-        status === nodeTypes.FINISH ||
-        status === nodeTypes.FINISHPATH ||
-        status === nodeTypes.FINISHVISITED
-    ) {
+    else if (finishNodes.includes(status)) {
         if(action === actionType.resetFull){
             changeNormal(node, nodeTypes.FINISH)
         }
@@ -180,11 +232,7 @@ const changeNode = (node: gridNode, status: nodeTypes, action: actionType) => {
             changeNormal(node, nodeTypes.VISITED)
         }
     }
-    else if (
-        status === nodeTypes.START ||
-        status === nodeTypes.STARTPATH ||
-        status === nodeTypes.STARTVISITED
-    ) {
+    else if (startNodes.includes(status)) {
         if(action === actionType.resetFull){
             changeNormal(node, nodeTypes.START)
         }
