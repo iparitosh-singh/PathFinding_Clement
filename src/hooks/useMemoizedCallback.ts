@@ -1,13 +1,11 @@
 import React, {useCallback, useEffect, useRef} from 'react'
 
 
-interface callbackInterface {
-    (event: React.MouseEvent, row: number, col: number): void
-}
+type callback = (event: React.MouseEvent, row: number , col: number) => void
+type callbackPromise = (event: React.MouseEvent, row: number , col: number) => Promise<void>;
 
 //bomb hook
-
-const useMemoizedCallback = <T extends callbackInterface>(callback: T, inputs: any = []) => {
+const useMemoizedCallback = (callback: callback | callbackPromise, inputs: any = []) => {
     const callbackRef = useRef(callback)
 
     const memoizedCallback = useCallback((event, row, col) => {

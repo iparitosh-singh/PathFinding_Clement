@@ -11,7 +11,6 @@ export interface NavProps {
     isRunning: boolean
 }
 export interface algorithmNode{
-    status: string,
     row: number,
     col: number,
     distance: number,
@@ -19,6 +18,14 @@ export interface algorithmNode{
     weight: number,
     isWall: boolean,
     heuristicDistance: number
+}
+
+export interface gridNode {
+    row: number,
+    col: number,
+    ref: React.RefObject<NodeHandle>
+    isStart: boolean,
+    isFinish: boolean
 }
 
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import {algorithms} from '../helper'
+import {algorithms} from '../../interfaces/constants'
 import {NavProps} from '../../interfaces'
 import './Navbar.scss'
 

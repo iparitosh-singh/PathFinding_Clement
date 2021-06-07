@@ -28,6 +28,10 @@
             border-radius: 50%;
             background-color: yellow;
         }
+        &.instant {
+            animation: none;
+            background-color: $unvisitedWall;
+        }
     }
     &.start {
         outline: none;
@@ -36,28 +40,7 @@
         background-repeat: no-repeat;
         background-size: contain;
         animation-name: specialNodes;
-        &.visited {
-            animation-name: visitedAnimated;
-            outline: 1px solid darken($unvisitedWall, 15%);
-        }
-        &.path {
-            animation-name: path;
-            outline: 1px solid darken($pathFinal, 10%);
-            &.left {
-                background-image: url('../../../assets/icons/triangletwo-left.svg');
-            }
-            &.right{
-                background-image: url('../../../assets/icons/triangletwo-right.svg');
-            }
-            &.up {
-                background-image: url('../../../assets/icons/triangletwo-up.svg');
-            }
-            &.down {
-                background-image: url('../../../assets/icons/triangletwo-down.svg');
-            }
-        }
     }
-
     &.finish {
         outline: none;
         background-image: url('../../../assets/icons/circle.svg');
@@ -65,25 +48,14 @@
         background-repeat: no-repeat;
         background-size: contain;
         animation-name: specialNodes;
-        &.visited {
-            animation-name: visitedAnimated;
-            outline: 1px solid darken($unvisitedWall, 15%);
-        }
-        &.path {
-            animation-name: path;
-            outline: 1px solid darken($pathFinal, 10%);
-            &.left {
-                background-image: url('../../../assets/icons/triangletwo-left.svg');
-            }
-            &.right{
-                background-image: url('../../../assets/icons/triangletwo-right.svg');
-            }
-            &.up {
-                background-image: url('../../../assets/icons/triangletwo-up.svg');
-            }
-            &.down {
-                background-image: url('../../../assets/icons/triangletwo-down.svg');
-            }
+    }
+    &.visited {
+        animation-name: visitedAnimated;
+        outline: 1px solid darken($unvisitedWall, 15%);
+        &.current {
+            animation: none;
+            border-radius: 50%;
+            background-color: yellow;
         }
     }
     &.path {
@@ -92,18 +64,21 @@
         animation-name: path ;
         animation-duration: 1.5s;
         animation-timing-function: linear;
-            &.left {
-                background-image: url('../../../assets/icons/triangletwo-left.svg');
-            }
-            &.right{
-                background-image: url('../../../assets/icons/triangletwo-right.svg');
-            }
-            &.up {
-                background-image: url('../../../assets/icons/triangletwo-up.svg');
-            }
-            &.down {
-                background-image: url('../../../assets/icons/triangletwo-down.svg');
-            }
+    }
+    &.left {
+        background-image: url('../../../assets/icons/triangletwo-left.svg');
+    }
+    &.right{
+        background-image: url('../../../assets/icons/triangletwo-right.svg');
+    }
+    &.up {
+        background-image: url('../../../assets/icons/triangletwo-up.svg');
+    }
+    &.down {
+        background-image: url('../../../assets/icons/triangletwo-down.svg');
+    }
+    &.instant{
+        animation: none;
     }
 }
 // animations
@@ -123,6 +98,7 @@
     0% {
         transform: scale(.3);
         border-radius: 100%;
+        outline: none;
     }
     50% {
         background-color: adjust-hue($unvisitedWall, $degrees: -20deg);
@@ -132,6 +108,7 @@
         transform: scale(1.2);
         background-color: adjust-hue($unvisitedWall, -50deg);
         border-radius: 100%;
+        outline: none;
     }
     100% {
         transform: scale(1.0);

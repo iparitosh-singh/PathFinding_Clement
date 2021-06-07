@@ -56,9 +56,9 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
             onMouseLeave={(event) => props.onMouseLeave(event, props.row, props.col)}
 
         >
-        <div className={`node ${status}`}
-        >
-        </div></div>
+            <div className={`node ${status}`}>
+            </div>
+        </div>
     )
 }
 
