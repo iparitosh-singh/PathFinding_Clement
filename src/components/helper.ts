@@ -306,11 +306,12 @@ export const redoAlog = (
     let { nodeGrid, start, finish } = makeAlgorithmGrid(grid)
     let returnVal: returnValue
     if(checkStart(type)){
-        returnVal = animateInstant(nodeGrid,nodeGrid[node.row][node.col], finish, algorithms[selectedAlgo])
+        returnVal = animateInstant(nodeGrid, nodeGrid[node.row][node.col], finish, algorithms[selectedAlgo])
     }
     else {
-        returnVal = animateInstant(nodeGrid,start, nodeGrid[node.row][node.col], algorithms[selectedAlgo])
+        returnVal = animateInstant(nodeGrid, start, nodeGrid[node.row][node.col], algorithms[selectedAlgo])
     }
+
     const { nodeVisitedOrder, path, endReached} = returnVal
     if(nodeVisitedOrder.length <= 0) return
     for (let row = 0; row < grid.length; row++) {

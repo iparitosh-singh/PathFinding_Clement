@@ -1,21 +1,18 @@
-import React, {useCallback, useEffect, useRef} from 'react'
-
-
-type callback = (event: React.MouseEvent, row: number , col: number) => void
-type callbackPromise = (event: React.MouseEvent, row: number , col: number) => Promise<void>;
+import {useCallback, useEffect, useRef} from 'react'
 
 //bomb hook
-const useMemoizedCallback = (callback: callback | callbackPromise, inputs: any = []) => {
+const useMemoizedCallback = function<T extends (...args: any[]) => any> (callback: T , deps: ReadonlyArray<any>){
     const callbackRef = useRef(callback)
 
     const memoizedCallback = useCallback((event, row, col) => {
         return callbackRef.current(event, row, col)
     }, [])
 
-    const updateCallback = useCallback(callback, [callback, ...inputs])
+    const updateCallback = useCallback(callback, [callback, ...deps])
+
     useEffect(() => {
         callbackRef.current = updateCallback
-    }, [inputs, updateCallback])
+    }, [deps, updateCallback])
 
     return memoizedCallback
 }
