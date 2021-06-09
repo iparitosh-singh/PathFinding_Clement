@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Node from './Node'
+import Legends from '../Legend'
 import Navbar from '../Navbar'
 
 import { BoardProps, gridNode } from '../../interfaces'
@@ -12,16 +13,15 @@ import {
     animatePath,
     checkStart,
     checkFinish,
-//    redoAlog
+    redoAlog
 } from '../helper'
 
 import useMemoizedCallback from '../../hooks/useMemoizedCallback'
 import {nodeTypes, actionType } from '../../interfaces/constants'
-
 import './Board.scss'
 
-export type NodeHandle = React.ElementRef<typeof Node>
 
+export type NodeHandle = React.ElementRef<typeof Node>
 
 const Board: React.FC<BoardProps> = (props) => {
     const { height, width } = props
@@ -84,7 +84,7 @@ const Board: React.FC<BoardProps> = (props) => {
     }, [])
 
 
-    const handleMouseEnter = useMemoizedCallback(async (event: React.MouseEvent, row: number, col: number): Promise<void> => {
+    const handleMouseEnter = useMemoizedCallback((event: React.MouseEvent, row: number, col: number): void => {
         if (event.buttons !== 1 || isRunning) return
         const nodeState = getStatus(grid[row][col])
         if (!checkStart(nodePressed) && !checkFinish(nodePressed)) {
@@ -95,11 +95,10 @@ const Board: React.FC<BoardProps> = (props) => {
         //if the start/finish node is special node
         else {
             if (!checkStart(nodeState) && !checkFinish(nodeState)) {
-                await changeNormal(grid[row][col], nodePressed)
+                changeNormal(grid[row][col], nodePressed)
                 if (algoDone) {
-                    //redoAlog(grid, selectedAlgo)
+                    redoAlog(grid, selectedAlgo, {row, col}, nodePressed)
                 }
-
             }
         }
     }, [])
@@ -150,9 +149,11 @@ const Board: React.FC<BoardProps> = (props) => {
         setIsRunning(false)
         setAlgoDone(true)
     }
+
     const handleAlgoSelect = (event: React.ChangeEvent<HTMLSelectElement>): void => {
         setSelectedAlgo(parseInt(event.target.value))
     }
+
     return (
         <>
             <Navbar
@@ -164,9 +165,7 @@ const Board: React.FC<BoardProps> = (props) => {
                 isRunning={isRunning}
             />
             <div className="container">
-                <div>
-                    This is the discription text of the algorithms
-                </div>
+                <Legends selectedAlgo={selectedAlgo} />
                 <div className="grid"
                 onMouseLeave={() => {setNodePressed(nodeTypes.UNVISITED)}}
                 >

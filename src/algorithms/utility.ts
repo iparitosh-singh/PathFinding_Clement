@@ -9,7 +9,7 @@ export const generateVisited = (grid: algorithmNode[][]) => {
         }
         visited.push(arr)
     }
-    return visited 
+    return visited
 }
 
 export const getUnvistedNeighbours = (node: algorithmNode, grid: algorithmNode[][], visited: boolean[][]): algorithmNode[] => {
