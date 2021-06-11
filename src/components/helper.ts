@@ -1,6 +1,7 @@
 import {
     nodeTypes,
     actionType,
+    startPath,
 } from '../interfaces/constants'
 
 import {
@@ -170,12 +171,12 @@ export const changeNode = (node: gridNode, status: nodeTypes, action: actionType
             changeNormal(node, nodeTypes.VISITED)
         }
     }
-    else if (status === nodeTypes.VISITED){
+    else if (status === nodeTypes.VISITED || status === nodeTypes.VISITEDINSTANT){
         if(action === actionType.reset || action === actionType.resetFull){
             changeNormal(node, nodeTypes.UNVISITED, nodeTypes.UNVISITED)
         }
     }
-    else if(status === nodeTypes.PATH){
+    else if(status === nodeTypes.PATH || status === nodeTypes.PATHINSTANT){
         changeNormal(node, nodeTypes.UNVISITED)
     }
 }

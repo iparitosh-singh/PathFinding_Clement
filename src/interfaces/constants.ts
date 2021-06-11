@@ -75,6 +75,7 @@ export const finishPath = [
     nodeTypes.FINISHPATHUP,
 ]
 
+
 export enum actionType {
     resetFull,
     reset,
