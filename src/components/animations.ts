@@ -1,10 +1,10 @@
-import { 
-    changeNormal, 
-    makeAlgorithmGrid, 
-    getStatus, 
-    animate, 
-    checkStart, 
-    setDirectionPath, 
+import {
+    changeNormal,
+    makeAlgorithmGrid,
+    getStatus,
+    animate,
+    checkStart,
+    setDirectionPath,
     setStartOrFinishInstant,
     changeNode
 } from "./helper"
