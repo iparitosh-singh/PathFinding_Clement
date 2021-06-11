@@ -26,13 +26,6 @@ const aStarManhattan = (grid: algorithmNode[][], start: algorithmNode, finish: a
         }
     }
 
-    /*let path:algorithmNode[] = []
-    let current_node: algorithmNode | undefined = finish
-    while(current_node !== undefined){
-        path.push(current_node)
-        current_node = current_node.previousNode
-    }
-    path.reverse()*/
     let path = endReached ? getPath(finish) : []
     return {nodeVisitedOrder, endReached, path}
 }

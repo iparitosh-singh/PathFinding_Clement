@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import Node from "./Node";
 import Legends from "../Legend";
 import Navbar from "../Navbar";
+import Description from '../Discription'
 
 import { BoardProps, gridNode } from "../../interfaces";
 import {
@@ -80,7 +81,8 @@ const Board: React.FC<BoardProps> = (props) => {
       if (!checkStart(nodeState) && !checkFinish(nodeState)) {
         if (nodeState === nodeTypes.WALL)
           changeNormal(grid[row][col], nodeTypes.UNVISITED);
-        else changeNormal(grid[row][col], nodeTypes.WALL);
+        else
+          changeNormal(grid[row][col], nodeTypes.WALL);
       }
     },
     []
@@ -92,13 +94,13 @@ const Board: React.FC<BoardProps> = (props) => {
       const nodeState = getStatus(grid[row][col]);
       if (!checkStart(nodePressed) && !checkFinish(nodePressed)) {
         if (!checkStart(nodeState) && !checkFinish(nodeState)) {
-          changeNormal(grid[row][col], nodeTypes.WALL);
+          changeNormal(grid[row][col], nodeTypes.WALL, nodeTypes.UNVISITED);
         }
       }
-      //if the start/finish node is special node
+      //if the start/finish node is pressed
       else {
         if (!checkStart(nodeState) && !checkFinish(nodeState) && nodeState !== nodeTypes.WALL) {
-          changeNormal(grid[row][col], nodePressed);
+            changeNormal(grid[row][col], nodePressed);
           if (algoDone) {
             redoAlgo(grid, selectedAlgo, { row, col }, nodePressed);
           }
@@ -125,9 +127,9 @@ const Board: React.FC<BoardProps> = (props) => {
       const nextElement = event.relatedTarget as HTMLElement;
       const nextNodeClasses = nextElement.className.split(" ");
       if (
-        nextNodeClasses[0] !== "node" ||
-        nextNodeClasses[1] === "start" ||
-        nextNodeClasses[1] === "finish"
+        nextNodeClasses[0] !== "node"
+      ||nextNodeClasses[1] === "start"
+      ||nextNodeClasses[1] === "finish"
       ) {
         setNodePressed(nodeTypes.UNVISITED);
         return;
@@ -175,9 +177,11 @@ const Board: React.FC<BoardProps> = (props) => {
         handleReset={clearWallAndPath}
         selectedAlgo={selectedAlgo}
         isRunning={isRunning}
+        algoDone={algoDone}
       />
       <div className="container">
-        <Legends selectedAlgo={selectedAlgo} />
+        <Legends/>
+        <Description selectedAlgo={selectedAlgo}/>
         <div
           className="grid"
           onMouseLeave={() => {

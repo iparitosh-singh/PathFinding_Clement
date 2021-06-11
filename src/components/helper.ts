@@ -1,7 +1,6 @@
 import {
     nodeTypes,
     actionType,
-    startPath,
 } from '../interfaces/constants'
 
 import {

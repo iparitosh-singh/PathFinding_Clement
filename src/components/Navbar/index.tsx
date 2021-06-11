@@ -10,10 +10,12 @@ const Navbar: React.FC<NavProps> = (props) => {
         handleReset,
         handleVisualize,
         selectedAlgo,
-        isRunning
+        isRunning,
+        algoDone
     } = props
 
-    const running = isRunning ? 'running' : ''
+    const running = isRunning || algoDone ? 'running' : ''
+    const disabled = isRunning ? 'disabled' : ''
     return (
         <>
             <div className='navbar'>
@@ -22,9 +24,9 @@ const Navbar: React.FC<NavProps> = (props) => {
                     <select onChange={handleAlgoSelect} value={selectedAlgo} className='dropDown' >
                         {algorithms.map((algo, index) => (<option key={index} value={index}>{algo.name}</option>))}
                     </select>
-                    <button className={"btn visualize " + running} onClick={handleVisualize}>Visualize</button>
-                    <button className="btn" onClick={handleRedoAlgo}>ClearAlgo</button>
-                    <button className="btn" onClick={handleReset}>Clear</button>
+                    <button className={"btn visualize " + running} onClick={() => {if(!running) handleVisualize()}}>Visualize</button>
+                    <button className={"btn " + disabled} onClick={handleRedoAlgo}>ClearAlgo</button>
+                    <button className={"btn " + disabled} onClick={handleReset}>Clear</button>
                 </div>
             </div>
         </>

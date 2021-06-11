@@ -40,9 +40,6 @@
         background-repeat: no-repeat;
         background-size: contain;
         animation-name: specialNodes;
-        &:hover {
-            transform: scale(0.3);
-        }
     }
     &.finish {
         outline: none;

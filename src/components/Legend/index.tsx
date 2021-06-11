@@ -1,24 +1,33 @@
-import React, {useState, useEffect} from 'react'
+import React  from 'react'
+import './Legends.scss'
+import startLogo from '../../assets/icons/triangletwo-right.svg'
+import finishLogo from '../../assets/icons/circle.svg'
+const Legends: React.FC = () => {
 
-interface LegendsType {
-  selectedAlgo: number
-}
-
-const Legends: React.FC<LegendsType> = (props) => {
-  const [currentAlgo, setCurrentAlgo] = useState<number>(0)
-  const {selectedAlgo} = props
-
-  useEffect(() => {
-    setCurrentAlgo(selectedAlgo)
-  }, [selectedAlgo])
 
   return (
     <div
-      style={{ height: '50px'}}
+      className="legend-container"
     >
-      {currentAlgo + 1}
-      <div>
-        This is the discription tent of the algorithms
+      <div className="legend">
+        <img alt='start' src={startLogo}/>
+        <div>Start</div>
+      </div>
+      <div className="legend">
+        <img alt='finish' src={finishLogo}/>
+        <div>Target</div>
+      </div>
+      <div className="legend">
+        <div className='wall'></div>
+        <div>Wall</div>
+      </div>
+      <div className="legend">
+        <div className='visited'></div>
+        <div>Visited</div>
+      </div>
+      <div className="legend">
+        <div className='path'></div>
+        <div>Path</div>
       </div>
     </div>
   )

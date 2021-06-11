@@ -8,7 +8,8 @@ export interface NavProps {
     handleVisualize: () => void,
     handleRedoAlgo: () => void,
     selectedAlgo: number
-    isRunning: boolean
+    isRunning: boolean,
+    algoDone: boolean,
 }
 export interface algorithmNode{
     row: number,
@@ -60,5 +61,6 @@ export interface algoType {
             grid: algorithmNode[][],
             start: algorithmNode,
             finish: algorithmNode
-        ) => returnValue
+        ) => returnValue,
+        text: string
 }

@@ -40,38 +40,38 @@ export enum nodeTypes {
 }
 
 export enum algoName {
-    BFS = 'BFS', 
-    Dijkstra = 'Dijkstar\'s', 
-    AstarManhattan = 'A* Manhattan', 
+    BFS = 'BFS',
+    Dijkstra = 'Dijkstar\'s',
+    AstarManhattan = 'A* Manhattan',
 }
 
 export const startNodes = [
-    nodeTypes.START, 
-    nodeTypes.STARTPATHDOWN, 
-    nodeTypes.STARTPATHLEFT, 
-    nodeTypes.STARTPATHRIGHT, 
+    nodeTypes.START,
+    nodeTypes.STARTPATHDOWN,
+    nodeTypes.STARTPATHLEFT,
+    nodeTypes.STARTPATHRIGHT,
     nodeTypes.STARTPATHUP,
     nodeTypes.STARTVISITED
 ]
 
 export const finishNodes = [
-    nodeTypes.FINISH, 
-    nodeTypes.FINISHPATHDOWN, 
-    nodeTypes.FINISHPATHLEFT, 
-    nodeTypes.FINISHPATHRIGHT, 
+    nodeTypes.FINISH,
+    nodeTypes.FINISHPATHDOWN,
+    nodeTypes.FINISHPATHLEFT,
+    nodeTypes.FINISHPATHRIGHT,
     nodeTypes.FINISHPATHUP,
     nodeTypes.FINISHVISITED
 ]
 export const startPath = [
-    nodeTypes.STARTPATHDOWN, 
-    nodeTypes.STARTPATHLEFT, 
-    nodeTypes.STARTPATHRIGHT, 
+    nodeTypes.STARTPATHDOWN,
+    nodeTypes.STARTPATHLEFT,
+    nodeTypes.STARTPATHRIGHT,
     nodeTypes.STARTPATHUP,
 ]
 export const finishPath = [
-    nodeTypes.FINISHPATHDOWN, 
-    nodeTypes.FINISHPATHLEFT, 
-    nodeTypes.FINISHPATHRIGHT, 
+    nodeTypes.FINISHPATHDOWN,
+    nodeTypes.FINISHPATHLEFT,
+    nodeTypes.FINISHPATHRIGHT,
     nodeTypes.FINISHPATHUP,
 ]
 
@@ -86,14 +86,18 @@ export enum actionType {
 export const algorithms: Array<algoType> = [
     {
         name: algoName.BFS,
-        algorithm: algos.BFS
+        algorithm: algos.BFS,
+        text: 'BFS Searches the nodes at the same depth from the start at same time'
     },
     {
         name: algoName.Dijkstra,
-        algorithm: algos.Dijkstra
+        algorithm: algos.Dijkstra,
+        text: 'Dijkstra\'s algorithm just prioritizes path with the shortest distance'
     },
     {
         name: algoName.AstarManhattan,
-        algorithm: algos.astarM
+        algorithm: algos.astarM,
+        text: 'A* algorithm knows about the shortest the position of the target'
     }
 ]
+

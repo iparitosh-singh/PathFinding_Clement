@@ -1,9 +1,7 @@
 @import '../../variables.module.scss';
 .navbar {
-    background-color: white;
-    border: 0 0 20px;
-    border-color: $buttonNormal;
-    height: 50px;
+    background-color: $unvisitedWall;
+    height: 4em;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,16 +27,12 @@
     border-radius: 4px;
     transition: ease-out 0.3s;
     font-family: 'Poppins', sans-serif;
-    background-color: white;
     padding:  5px 0;
     background-color: $buttonNormal;
     color: $unvisitedWall;
         &.visualize{
-            background-color: $unvisitedWall;
-            color: white;
-            &:hover {
-                background-color: $green;
-            }
+            background-color: darken($unvisitedWall, 30%);
+            color: $buttonNormal;
             &.running {
                 background-color: $red;
                 color: $wall;
@@ -48,8 +42,8 @@
             }
         }
         &:hover {
-            background-color: $unvisitedWall;
-            color: $wall;
+            background-color: $pathFinal;
+            color:$buttonNormal;
         }
         &:active {
             background-color: $green;
