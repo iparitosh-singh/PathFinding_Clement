@@ -5,15 +5,18 @@ import Navbar from "../Navbar";
 
 import { BoardProps, gridNode } from "../../interfaces";
 import {
-  changeNormal,
-  getStatus,
   getNodeVistedOrder,
   aninimateVisitedNode,
-  remakingGrid,
   animatePath,
+  redoAlgo,
+  remakingGrid
+} from '../animations'
+
+import {
+  changeNormal,
+  getStatus,
   checkStart,
   checkFinish,
-  redoAlog,
 } from "../helper";
 
 import useMemoizedCallback from "../../hooks/useMemoizedCallback";
@@ -94,10 +97,10 @@ const Board: React.FC<BoardProps> = (props) => {
       }
       //if the start/finish node is special node
       else {
-        if (!checkStart(nodeState) && !checkFinish(nodeState)) {
+        if (!checkStart(nodeState) && !checkFinish(nodeState) && nodeState !== nodeTypes.WALL) {
           changeNormal(grid[row][col], nodePressed);
           if (algoDone) {
-            redoAlog(grid, selectedAlgo, { row, col }, nodePressed);
+            redoAlgo(grid, selectedAlgo, { row, col }, nodePressed);
           }
 
         }

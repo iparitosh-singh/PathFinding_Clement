@@ -1,14 +1,11 @@
 import {
     nodeTypes,
-    algorithms,
     actionType,
 } from '../interfaces/constants'
 
 import {
     algorithmNode,
-    returnValue,
     gridNode,
-    algoType
 } from '../interfaces'
 
 const getNewAlgoNode = (row: number, col: number) : algorithmNode => {
@@ -42,7 +39,7 @@ export const changeNormal = (
         }
 }
 
-const makeAlgorithmGrid = (grid: Array<Array<gridNode>>): {
+export const makeAlgorithmGrid = (grid: Array<Array<gridNode>>): {
     nodeGrid: algorithmNode[][],
     start: algorithmNode,
     finish: algorithmNode
@@ -74,14 +71,14 @@ const makeAlgorithmGrid = (grid: Array<Array<gridNode>>): {
     return { nodeGrid, start, finish }
 }
 
-const animate = (node: gridNode, status: nodeTypes, frameRate: number = 40)=> {
+export const animate = (node: gridNode, status: nodeTypes, frameRate: number = 40)=> {
     return new Promise<void>(resolve => setTimeout(() => {
         changeNormal(node, status)
         resolve()
     }, frameRate))
 }
 
-const setDirection = async (current: gridNode, next: gridNode, type: nodeTypes, frameRate: number): Promise<void> => {
+export const setDirectionPath = async (current: gridNode, next: gridNode, type: nodeTypes, frameRate: number): Promise<void> => {
     if(current.row === next.row){
         //going left
         if(current.col > next.col){
@@ -133,62 +130,7 @@ const setDirection = async (current: gridNode, next: gridNode, type: nodeTypes, 
     }
 }
 
-export const animatePath = async (
-    path:Array<algorithmNode>,
-    grid: Array<Array<gridNode>>,
-    framRate: number = 10
-): Promise<void> => {
-    for (let i = 0; i < path.length; i++) {
-        const { row, col } = path[i];
-        if (i === 0){
-            const current = grid[path[i].row][path[i].col]
-            const next = grid[path[1].row][path[1].col]
 
-            await setDirection(current, next, nodeTypes.START, framRate)
-        }
-        else if (i === path.length - 1){
-            const prev = grid[path[i - 1].row][path[i - 1].col]
-            const curr = grid[path[i].row][path[i].col]
-            await setDirection(prev, curr, nodeTypes.FINISH, framRate)
-        }
-        else{
-            const current = grid[path[i].row][path[i].col]
-            const next = grid[path[i + 1].row][path[i + 1].col]
-            await setDirection(current, next, nodeTypes.VISITED, framRate)
-            await animate(grid[row][col], nodeTypes.PATH, framRate)
-        }
-    }
-}
-
-export const aninimateVisitedNode = async (
-    nodeVisitedOrder: algorithmNode[],
-    grid: gridNode[][],
-    framRate: number = 5
-): Promise<void> => {
-    for (let i = 0; i < nodeVisitedOrder.length; i++) {
-        const { row, col } = nodeVisitedOrder[i];
-        const node = grid[row][col];
-        const nodeStatus = getStatus(node)
-        if (nodeStatus === nodeTypes.START) {
-            await animate(node, nodeTypes.VISITEDCURRENT, framRate)
-            await animate(node, nodeTypes.STARTVISITED, framRate)
-        }
-        else if (nodeStatus === nodeTypes.FINISH) {
-            await animate(node, nodeTypes.VISITEDCURRENT, framRate)
-            await animate(node, nodeTypes.FINISHVISITED, framRate)
-        }
-        else if(nodeStatus === nodeTypes.UNVISITED){
-            await animate(node, nodeTypes.VISITEDCURRENT, framRate)
-            await animate(node, nodeTypes.VISITED, framRate)
-        }
-
-    }
-}
-
-export const getNodeVistedOrder = (selectedAlgo: number, grid: gridNode[][] ): returnValue => {
-    const {nodeGrid, start, finish}= makeAlgorithmGrid(grid)
-    return algorithms[selectedAlgo].algorithm(nodeGrid, start, finish)
-}
 
 
 export const checkStart = (status: nodeTypes): boolean => {
@@ -200,7 +142,7 @@ export const checkFinish = (status: nodeTypes): boolean => {
     return types[0] === 'finish'
 }
 
-const changeNode = (node: gridNode, status: nodeTypes, action: actionType) => {
+export const changeNode = (node: gridNode, status: nodeTypes, action: actionType) => {
     if(status === nodeTypes.WALL){
         if(action === actionType.resetFull){
             changeNormal(node, nodeTypes.UNVISITED)
@@ -238,18 +180,7 @@ const changeNode = (node: gridNode, status: nodeTypes, action: actionType) => {
     }
 }
 
-export const remakingGrid = (
-    action: actionType,
-    grid: gridNode[][],
-): void => {
-    for (const row of grid) {
-        for (const node of row) {
-            if (node.ref.current)
-                changeNode(node, node.ref.current.status, action)
-        }
-    }
-}
-const setStartOrFinish = (earlyNode: gridNode, lateNode: gridNode, type: nodeTypes) =>{
+export const setStartOrFinishInstant = (earlyNode: gridNode, lateNode: gridNode, type: nodeTypes) =>{
     if(earlyNode.row === lateNode.row){
         if(earlyNode.col > lateNode.col){
             if(type === nodeTypes.START){
@@ -285,60 +216,5 @@ const setStartOrFinish = (earlyNode: gridNode, lateNode: gridNode, type: nodeTyp
                 changeNormal(lateNode, nodeTypes.FINISHPATHUPINSTANT, nodeTypes.UNVISITED)
             }
         }
-    }
-}
-
-export const animateInstant = (
-    grid: Array<Array<algorithmNode>>,
-    start: algorithmNode,
-    finish: algorithmNode,
-    algorithm: algoType
-): returnValue => {
-    return algorithm.algorithm(grid, start, finish)
-}
-
-export const redoAlog = (
-    grid: Array<Array<gridNode>>,
-    selectedAlgo: number,
-    node: {row: number, col: number},
-    type: nodeTypes
-): void => {
-    let { nodeGrid, start, finish } = makeAlgorithmGrid(grid)
-    let returnVal: returnValue
-    if(checkStart(type)){
-        returnVal = animateInstant(nodeGrid, nodeGrid[node.row][node.col], finish, algorithms[selectedAlgo])
-    }
-    else {
-        returnVal = animateInstant(nodeGrid, start, nodeGrid[node.row][node.col], algorithms[selectedAlgo])
-    }
-
-    const { nodeVisitedOrder, path, endReached} = returnVal
-    if(nodeVisitedOrder.length <= 0) return
-    for (let row = 0; row < grid.length; row++) {
-        for (let col = 0; col < grid[row].length; col++) {
-            const status = getStatus(grid[row][col])
-            if (status !== nodeTypes.WALL) {
-                changeNormal(grid[row][col], nodeTypes.UNVISITED, nodeTypes.UNVISITED)
-            }
-        }
-    }
-    for (let i = 0; i < nodeVisitedOrder.length; i++) {
-        const { row, col } = nodeVisitedOrder[i]
-        const node = grid[row][col]
-        if (!node.ref.current)
-            continue
-        changeNormal(node, nodeTypes.VISITEDINSTANT, nodeTypes.UNVISITED)
-    }
-    if (endReached && path.length <= 0) {
-        setStartOrFinish(grid[path[0].row][path[0].col], grid[path[1].row][path[1].col], nodeTypes.START)
-        for (let i = 1; i < path.length - 1; i++) {
-            const { row, col } = path[i]
-            const node = grid[row][col]
-            if (!node.ref.current)
-                continue
-            changeNormal(node, nodeTypes.PATHINSTANT, nodeTypes.UNVISITED)
-        }
-        const size = path.length - 1
-        setStartOrFinish(grid[path[size - 1].row][path[size - 1].col], grid[path[size].row][path[size].col], nodeTypes.FINISH)
     }
 }
