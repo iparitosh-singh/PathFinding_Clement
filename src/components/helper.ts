@@ -32,10 +32,11 @@ export const changeNormal = (
     status: nodeTypes,
     prevStatus?: nodeTypes
 ): void => {
-        const nodeRef = node.ref
-        nodeRef.current?.changeStatus(status)
-        if (prevStatus) {
-            nodeRef.current?.setPrevState(prevStatus)
+        if(node.ref.current){
+            node.ref.current.changeStatus(status)
+            if (prevStatus) {
+                node.ref.current.setPrevState(prevStatus)
+            }
         }
 }
 
@@ -71,14 +72,16 @@ export const makeAlgorithmGrid = (grid: Array<Array<gridNode>>): {
     return { nodeGrid, start, finish }
 }
 
-export const animate = (node: gridNode, status: nodeTypes, frameRate: number = 40)=> {
-    return new Promise<void>(resolve => setTimeout(() => {
+export const animate = async (node: gridNode, status: nodeTypes, frameRate: number ): Promise<void> => {
+    return new Promise(resolve =>
+    setTimeout(() => {
         changeNormal(node, status)
         resolve()
     }, frameRate))
 }
 
-export const setDirectionPath = async (current: gridNode, next: gridNode, type: nodeTypes, frameRate: number): Promise<void> => {
+export const setDirectionPath = async (current: gridNode, next: gridNode, type: nodeTypes, frameRate: number):
+    Promise<void> => {
     if(current.row === next.row){
         //going left
         if(current.col > next.col){
@@ -119,13 +122,13 @@ export const setDirectionPath = async (current: gridNode, next: gridNode, type: 
         //going down
         else {
             if(type === nodeTypes.START){
-                await animate(current, nodeTypes.STARTPATHDOWN, frameRate)
+                animate(current, nodeTypes.STARTPATHDOWN, frameRate)
             }
             else if(type === nodeTypes.FINISH){
-                await animate(next, nodeTypes.FINISHPATHDOWN, frameRate)
+                animate(next, nodeTypes.FINISHPATHDOWN, frameRate)
             }
             else
-            await animate(current, nodeTypes.PATHDOWN, frameRate)
+                animate(current, nodeTypes.PATHDOWN, frameRate)
         }
     }
 }
@@ -184,36 +187,36 @@ export const setStartOrFinishInstant = (earlyNode: gridNode, lateNode: gridNode,
     if(earlyNode.row === lateNode.row){
         if(earlyNode.col > lateNode.col){
             if(type === nodeTypes.START){
-                changeNormal(earlyNode, nodeTypes.STARTPATHLEFTINSTANT, nodeTypes.UNVISITED)
+                changeNormal(earlyNode, nodeTypes.STARTPATHLEFTINSTANT)
             }
             else {
-                changeNormal(lateNode, nodeTypes.FINISHPATHLEFTINSTANT, nodeTypes.UNVISITED)
+                changeNormal(lateNode, nodeTypes.FINISHPATHLEFTINSTANT)
             }
         }
         else {
             if(type === nodeTypes.START){
-                changeNormal(earlyNode, nodeTypes.STARTPATHRIGHTINSTANT, nodeTypes.UNVISITED)
+                changeNormal(earlyNode, nodeTypes.STARTPATHRIGHTINSTANT)
             }
             else {
-                changeNormal(lateNode, nodeTypes.FINISHPATHRIGHTINSTANT, nodeTypes.UNVISITED)
+                changeNormal(lateNode, nodeTypes.FINISHPATHRIGHTINSTANT)
             }
         }
     }
     else {
         if(earlyNode.row > lateNode.row){
             if(type === nodeTypes.START){
-                changeNormal(earlyNode, nodeTypes.STARTPATHDOWNINSTANT, nodeTypes.UNVISITED)
+                changeNormal(earlyNode, nodeTypes.STARTPATHUPINSTANT)
             }
             else {
-                changeNormal(lateNode, nodeTypes.FINISHPATHDOWNINSTANT, nodeTypes.UNVISITED)
+                changeNormal(lateNode, nodeTypes.FINISHPATHDOWNINSTANT)
             }
         }
         else {
             if(type === nodeTypes.START){
-                changeNormal(earlyNode, nodeTypes.STARTPATHUPINSTANT, nodeTypes.UNVISITED)
+                changeNormal(earlyNode, nodeTypes.STARTPATHDOWNINSTANT)
             }
             else {
-                changeNormal(lateNode, nodeTypes.FINISHPATHUPINSTANT, nodeTypes.UNVISITED)
+                changeNormal(lateNode, nodeTypes.FINISHPATHUPINSTANT)
             }
         }
     }

@@ -33,7 +33,6 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
 
 
     const changeStatus = (newStatus: nodeTypes): void => {
-        setPrevState(status)
         setStatus(newStatus)
     }
 
@@ -53,6 +52,7 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
             }}
             onMouseEnter={(event => props.onMouseEnter(event, props.row, props.col))}
             onMouseLeave={(event) => props.onMouseLeave(event, props.row, props.col)}
+            onMouseUp={props.onMouseUp}
 
         >
             <div className={`node ${status}`}>

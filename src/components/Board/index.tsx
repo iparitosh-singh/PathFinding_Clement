@@ -71,6 +71,8 @@ const Board: React.FC<BoardProps> = (props) => {
       row: Math.floor(height / 2),
       col: Math.floor((3 * width) / 4),
     });
+    setAlgoDone(false)
+    setIsRunning(false)
   }, [makeGrid, height, width]);
 
   const handleMouseDown = useMemoizedCallback(
@@ -89,22 +91,24 @@ const Board: React.FC<BoardProps> = (props) => {
   );
 
   const handleMouseEnter = useMemoizedCallback(
-    (event: React.MouseEvent, row: number, col: number): void => {
+    async (event: React.MouseEvent, row: number, col: number): Promise<void> => {
       if (event.buttons !== 1 || isRunning) return;
+
       const nodeState = getStatus(grid[row][col]);
+      const specialNode: boolean = (checkStart(nodeState) || checkFinish(nodeState)) ? true : false
+
       if (!checkStart(nodePressed) && !checkFinish(nodePressed)) {
-        if (!checkStart(nodeState) && !checkFinish(nodeState)) {
+        if (!specialNode) {
           changeNormal(grid[row][col], nodeTypes.WALL, nodeTypes.UNVISITED);
         }
       }
       //if the start/finish node is pressed
       else {
-        if (!checkStart(nodeState) && !checkFinish(nodeState) && nodeState !== nodeTypes.WALL) {
-            changeNormal(grid[row][col], nodePressed);
+        if (!specialNode) {
+          changeNormal(grid[row][col], nodePressed, nodeState);
           if (algoDone) {
-            redoAlgo(grid, selectedAlgo, { row, col }, nodePressed);
+            redoAlgo(grid, selectedAlgo, { row, col }, nodePressed, nodeState);
           }
-
         }
       }
     },
@@ -122,6 +126,7 @@ const Board: React.FC<BoardProps> = (props) => {
       const node = grid[row][col];
       if (!node.ref.current) return;
 
+
       //dont change if goinf out of the grid
       const prevStatus = node.ref.current.prevState;
       const nextElement = event.relatedTarget as HTMLElement;
@@ -134,7 +139,7 @@ const Board: React.FC<BoardProps> = (props) => {
         setNodePressed(nodeTypes.UNVISITED);
         return;
       }
-      if (!algoDone) changeNormal(node, prevStatus);
+        changeNormal(node, prevStatus, nodeTypes.UNVISITED);
     },
     []
   );
@@ -156,8 +161,9 @@ const Board: React.FC<BoardProps> = (props) => {
       selectedAlgo,
       grid
     );
-    await aninimateVisitedNode(nodeVisitedOrder, grid, 2);
-    if (endReached) await animatePath(path, grid, 10);
+    await aninimateVisitedNode(nodeVisitedOrder, grid, 1);
+    if (endReached)
+      await animatePath(path, grid, 2);
     setIsRunning(false);
     setAlgoDone(true);
   };

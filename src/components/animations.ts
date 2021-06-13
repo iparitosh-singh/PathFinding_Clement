@@ -27,28 +27,27 @@ export const remakingGrid = (
 export const animatePath = async (
     path:Array<algorithmNode>,
     grid: Array<Array<gridNode>>,
-    framRate: number = 10
+    framRate: number
 ): Promise<void> => {
-    for (let i = 0; i < path.length; i++) {
-        const { row, col } = path[i];
-        if (i === 0){
-            const current = grid[path[i].row][path[i].col]
-            const next = grid[path[1].row][path[1].col]
-
-            await setDirectionPath(current, next, nodeTypes.START, framRate)
+        for (let i = 0; i < path.length; i++) {
+            const { row, col } = path[i];
+            if (i === 0){
+                const current = grid[path[i].row][path[i].col]
+                const next = grid[path[1].row][path[1].col]
+                await setDirectionPath(current, next, nodeTypes.START, framRate)
+            }
+            else if (i === path.length - 1){
+                const prev = grid[path[i - 1].row][path[i - 1].col]
+                const curr = grid[path[i].row][path[i].col]
+                await setDirectionPath(prev, curr, nodeTypes.FINISH, framRate)
+            }
+            else{
+                const current = grid[path[i].row][path[i].col]
+                const next = grid[path[i + 1].row][path[i + 1].col]
+                await setDirectionPath(current, next, nodeTypes.VISITED, framRate)
+                await animate(grid[row][col], nodeTypes.PATH, framRate)
+            }
         }
-        else if (i === path.length - 1){
-            const prev = grid[path[i - 1].row][path[i - 1].col]
-            const curr = grid[path[i].row][path[i].col]
-            await setDirectionPath(prev, curr, nodeTypes.FINISH, framRate)
-        }
-        else{
-            const current = grid[path[i].row][path[i].col]
-            const next = grid[path[i + 1].row][path[i + 1].col]
-            await setDirectionPath(current, next, nodeTypes.VISITED, framRate)
-            await animate(grid[row][col], nodeTypes.PATH, framRate)
-        }
-    }
 }
 
 export const aninimateVisitedNode = async (
@@ -56,24 +55,23 @@ export const aninimateVisitedNode = async (
     grid: gridNode[][],
     framRate: number = 5
 ): Promise<void> => {
-    for (let i = 0; i < nodeVisitedOrder.length; i++) {
-        const { row, col } = nodeVisitedOrder[i];
-        const node = grid[row][col];
-        const nodeStatus = getStatus(node)
-        if (nodeStatus === nodeTypes.START) {
-            await animate(node, nodeTypes.VISITEDCURRENT, framRate)
-            await animate(node, nodeTypes.STARTVISITED, framRate)
+        for (let i = 0; i < nodeVisitedOrder.length; i++) {
+            const { row, col } = nodeVisitedOrder[i];
+            const node = grid[row][col];
+            const nodeStatus = getStatus(node)
+            if (nodeStatus === nodeTypes.START) {
+                animate(node, nodeTypes.VISITEDCURRENT, framRate)
+                animate(node, nodeTypes.STARTVISITED, framRate)
+            }
+            else if (nodeStatus === nodeTypes.FINISH) {
+                animate(node, nodeTypes.VISITEDCURRENT, framRate)
+                animate(node, nodeTypes.FINISHVISITED, framRate)
+            }
+            else if(nodeStatus === nodeTypes.UNVISITED){
+                animate(node, nodeTypes.VISITEDCURRENT, framRate)
+                animate(node, nodeTypes.VISITED, framRate)
+            }
         }
-        else if (nodeStatus === nodeTypes.FINISH) {
-            await animate(node, nodeTypes.VISITEDCURRENT, framRate)
-            await animate(node, nodeTypes.FINISHVISITED, framRate)
-        }
-        else if(nodeStatus === nodeTypes.UNVISITED){
-            await animate(node, nodeTypes.VISITEDCURRENT, framRate)
-            await animate(node, nodeTypes.VISITED, framRate)
-        }
-
-    }
 }
 
 export const getNodeVistedOrder = (selectedAlgo: number, grid: gridNode[][] ): returnValue => {
@@ -94,9 +92,12 @@ export const redoAlgo= (
     grid: Array<Array<gridNode>>,
     selectedAlgo: number,
     node: {row: number, col: number},
-    type: nodeTypes
+    type: nodeTypes,
+    currentNode: nodeTypes
 ): void => {
     let { nodeGrid, start, finish } = makeAlgorithmGrid(grid)
+    if(currentNode === nodeTypes.WALL)
+        nodeGrid[node.row][node.col].isWall = false
     let returnVal: returnValue
     if (checkStart(type)) {
         returnVal = getPathInstant(nodeGrid, nodeGrid[node.row][node.col], finish, algorithms[selectedAlgo])
@@ -120,7 +121,7 @@ export const redoAlgo= (
         const node = grid[row][col]
         if (!node.ref.current)
             continue
-        changeNormal(node, nodeTypes.VISITEDINSTANT, nodeTypes.UNVISITED)
+        changeNormal(node, nodeTypes.VISITEDINSTANT)
     }
 
 
@@ -132,7 +133,7 @@ export const redoAlgo= (
             const node = grid[row][col]
             if (!node.ref.current)
                 continue
-            changeNormal(node, nodeTypes.PATHINSTANT, nodeTypes.UNVISITED)
+            changeNormal(node, nodeTypes.PATHINSTANT)
         }
         const size = path.length - 1
         //setting the finish path direction
