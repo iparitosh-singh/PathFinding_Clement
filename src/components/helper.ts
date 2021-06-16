@@ -208,7 +208,7 @@ export const setStartOrFinishInstant = (earlyNode: gridNode, lateNode: gridNode,
                 changeNormal(earlyNode, nodeTypes.STARTPATHUPINSTANT)
             }
             else {
-                changeNormal(lateNode, nodeTypes.FINISHPATHDOWNINSTANT)
+                changeNormal(lateNode, nodeTypes.FINISHPATHUPINSTANT)
             }
         }
         else {
@@ -216,7 +216,7 @@ export const setStartOrFinishInstant = (earlyNode: gridNode, lateNode: gridNode,
                 changeNormal(earlyNode, nodeTypes.STARTPATHDOWNINSTANT)
             }
             else {
-                changeNormal(lateNode, nodeTypes.FINISHPATHUPINSTANT)
+                changeNormal(lateNode, nodeTypes.FINISHPATHDOWNINSTANT)
             }
         }
     }

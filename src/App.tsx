@@ -1,13 +1,14 @@
-import Board from './components/Board'
-import './App.scss'
+import { BrowserRouter } from "react-router-dom";
+import Router from "./router";
+import "./App.scss";
 const App = () => {
-  // ratio = 5 /12
-  const HEIGHT = 21, WIDTH = 60
   return (
     <div className="App">
-      <Board height={HEIGHT} width={WIDTH}/>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
     </div>
-  );
+  )
 }
 
 export default App;
