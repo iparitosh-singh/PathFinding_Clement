@@ -15,12 +15,11 @@
     }
 
     .items {
-        flex-grow: 1;
         display: flex;
-        justify-content: space-around;
+        flex-grow: 1;
+        justify-content: space-between;
         max-width: 50%;
         *{
-            width: 10em;
             padding: 0.5em 0;
             border-radius: 0.5em;
         }
@@ -30,6 +29,7 @@
 
 .btn {
     border: none;
+    width: 10em;
     transition: ease-out 0.3s;
     font-family: 'Poppins', sans-serif;
     background-color: $buttonNormal;
@@ -55,6 +55,12 @@
 
 }
 
+.sidebar-Dropdown {
+    display: none;
+    &.visible{
+        display: block;
+    }
+}
 .dropDown {
     outline: none;
     border-radius: 0.5em;
@@ -63,9 +69,59 @@
     font-family: 'Poppins', sans-serif;
 }
 
+.sidebar-icon {
+    display: none;
+    margin-left: 80%;
+}
+@media(max-width: 1100px){
+    &.btn{
+        width: 9em;
+    }
+    &.dropDown{
+        width: 9em;
+    }
+}
 
-@media (max-width: 1100px){
+@media(max-width: 1100px){
+    .btn{
+        width: 8em;
+    }
+    .dropDown{
+        width: 8em;
+    }
+}
+@media(max-width: 950px){
+    .btn{
+        width: 7em;
+    }
+    .dropDown{
+        width: 7em;
+    }
+}
+@media(max-width: 850px){
+    .btn{
+        width: 6em;
+    }
+    .dropDown{
+        width: 6em;
+    }
+}
+
+
+@media (max-width: 700px){
+    .items{
+        display: flex;
+        justify-content: flex-end;
+    }
     .btn {
+        display: none;
+        width: 0;
+    }
+    .dropDown {
         display: none
+    }
+    .sidebar-icon {
+        display: block;
+        flex-grow: 0;
     }
 }

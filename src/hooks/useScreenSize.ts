@@ -9,15 +9,34 @@ const getWindowDimensions = (): {width: number, height: number} => {
 }
 
 const useWindowDimensions = (): {width: number, height: number} => {
-    const [windowDimensions, setWindowDimensions] = useState<{width: number, height: number}>(getWindowDimensions())
+    const [width, setWidth] = useState<number>(61)
+    const [height] = useState<number>(23)
     useEffect(() => {
         const handleResize = () => {
-            setWindowDimensions(getWindowDimensions())
+            const windowWidth = getWindowDimensions().width
+            if(windowWidth < 400){
+                setWidth(10)
+            }
+            else if (windowWidth < 600){
+                setWidth(15)
+            }
+            else if(windowWidth < 800){
+                setWidth(30)
+            }
+            else if(windowWidth < 1000){
+                setWidth(45)
+            }
+            else if(windowWidth < 1200){
+                setWidth(50)
+            }
+            else {
+                setWidth(61)
+            }
         }
         window.addEventListener('resize', handleResize)
         return () => window.removeEventListener('resize', handleResize)
     }, [])
-    return windowDimensions
+    return {height, width}
 }
 
 export default useWindowDimensions

@@ -2,6 +2,7 @@ import React from 'react'
 import {algorithms} from '../../interfaces/constants'
 import {NavProps} from '../../interfaces'
 import './Navbar.scss'
+import sidebarIcon from '../../assets/sidebar.svg'
 
 const Navbar: React.FC<NavProps> = (props) => {
     const {
@@ -27,8 +28,11 @@ const Navbar: React.FC<NavProps> = (props) => {
                     <button className={"btn visualize " + running} onClick={() => {if(!running) handleVisualize()}}>Visualize</button>
                     <button className={"btn " + disabled} onClick={handleRedoAlgo}>ClearAlgo</button>
                     <button className={"btn " + disabled} onClick={handleReset}>Clear</button>
+                    <img className="sidebar-icon" src={sidebarIcon} alt="sidebar"/>
                 </div>
             </div>
+                    <div className="sidebar-Dropdown">
+                    </div>
         </>
     )
 
