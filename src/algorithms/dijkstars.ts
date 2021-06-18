@@ -10,11 +10,11 @@ const dijkstras = (grid: algorithmNode[][], start: algorithmNode, finish: algori
     let nodeVisitedOrder: algorithmNode[] = []
     let endReached: boolean = false
     const visited = generateVisited(grid)
-    let priority_queue: algorithmNode[] = getAllunvisited(grid) 
+    let priority_queue: algorithmNode[] = getAllunvisited(grid)
     start.distance = 0
     while(!!priority_queue.length){
         const closest_node = getClosestNode(priority_queue)
-        if(typeof(closest_node) === 'number') break 
+        if(typeof(closest_node) === 'number') break
         const {row, col} = closest_node
         if(closest_node.distance === Infinity) break
         visited[row][col] = true
@@ -38,7 +38,7 @@ const getClosestNode = (queue: algorithmNode[]) : algorithmNode | number => {
     queue.sort((a, b) => a.distance - b.distance)
     let node = queue.shift()
     if(node) return node
-    else return -1 
+    else return -1
 }
 
 const getAllunvisited = (grid: algorithmNode[][]): algorithmNode[] => {

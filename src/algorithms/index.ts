@@ -3,7 +3,7 @@ import Dijkstra from './dijkstars'
 import astarM from './a_star'
 
 export {
-    Dijkstra, 
+    Dijkstra,
     BFS,
     astarM,
 }

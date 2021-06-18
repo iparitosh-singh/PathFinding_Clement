@@ -1,5 +1,5 @@
 import {
-    algorithmNode, 
+    algorithmNode,
     returnValue
 } from '../interfaces'
 
@@ -13,8 +13,8 @@ const BFS = (grid: algorithmNode[][], start: algorithmNode, finish: algorithmNod
     queue.push(start)
     visited[start.row][start.col] = true
     nodeVisitedOrder.push(start)
-    let endReached = false 
-    let flag = false 
+    let endReached = false
+    let flag = false
 
     while(!!queue.length){
         if(flag) break
