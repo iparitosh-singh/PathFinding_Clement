@@ -8,7 +8,7 @@ const getWindowDimensions = (): {width: number, height: number} => {
     }
 }
 
-const useWindowDimensions = (): {width: number, height: number} => {
+const useWindowDimensions = (): {height: number, width: number}  => {
     const [width, setWidth] = useState<number>(61)
     const [height] = useState<number>(23)
     useEffect(() => {
@@ -34,8 +34,9 @@ const useWindowDimensions = (): {width: number, height: number} => {
             }
         }
         window.addEventListener('resize', handleResize)
+        handleResize() // run first time
         return () => window.removeEventListener('resize', handleResize)
-    }, [])
+    }, [width])
     return {height, width}
 }
 
