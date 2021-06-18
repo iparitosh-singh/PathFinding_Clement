@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {algorithms} from '../../interfaces/constants'
 import {NavProps} from '../../interfaces'
 import './Navbar.scss'
@@ -15,8 +15,10 @@ const Navbar: React.FC<NavProps> = (props) => {
         algoDone
     } = props
 
+    const [sidebar, setSidebar] = useState<boolean>(false);
     const running = isRunning || algoDone ? 'running' : ''
     const disabled = isRunning ? 'disabled' : ''
+const styles = sidebar ? {width: '100%'} : {width: '0', display: 'none'}
     return (
         <>
             <div className='navbar'>
@@ -28,10 +30,24 @@ const Navbar: React.FC<NavProps> = (props) => {
                     <button className={"btn visualize " + running} onClick={() => {if(!running) handleVisualize()}}>Visualize</button>
                     <button className={"btn " + disabled} onClick={handleRedoAlgo}>ClearAlgo</button>
                     <button className={"btn " + disabled} onClick={handleReset}>Clear</button>
-                    <img className="sidebar-icon" src={sidebarIcon} alt="sidebar"/>
+                    {!sidebar && <img
+                        className="sidebar-icon"
+                        src={sidebarIcon}
+                        alt="sidebar"
+                        onClick={() =>{
+                            setSidebar(true)
+                        }}
+                    />}
                 </div>
             </div>
-                    <div className="sidebar-Dropdown">
+            <div className="sidebar" style={styles}>
+                <button onClick={() => {setSidebar(false)}}>x</button>
+                <button onClick={() => {if(!running) handleVisualize()}}>Visualize</button>
+                <button onClick={handleRedoAlgo}>ClearAlgo</button>
+                <button onClick={handleReset}>Clear</button>
+                <select onChange={handleAlgoSelect} value={selectedAlgo}>
+                    {algorithms.map((algo, index) => (<option key={index} value={index}>{algo.name}</option>))}
+                </select>
                     </div>
         </>
     )

@@ -17,7 +17,7 @@
     .items {
         display: flex;
         flex-grow: 1;
-        justify-content: space-between;
+        justify-content: space-around;
         max-width: 50%;
         *{
             padding: 0.5em 0;
@@ -55,12 +55,6 @@
 
 }
 
-.sidebar-Dropdown {
-    display: none;
-    &.visible{
-        display: block;
-    }
-}
 .dropDown {
     outline: none;
     border-radius: 0.5em;
@@ -68,11 +62,45 @@
     color: $wall;
     font-family: 'Poppins', sans-serif;
 }
+.sidebar{
+    height: 100%;
+    width: 0;
+    display: flex;
+    justify-content: space-around;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+    * {
+        border-radius: 0.4em;
+    }
+    button {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.9em;
+        padding: 0.5em 0.5em 0.5em 0.5em;
+        transition: 0.3s;
+        height: 2em;
+        background-color: $buttonNormal;
+        color: $unvisitedWall;
+    }
+    select {
+        outline: none;
+        border-radius: 0.5em;
+        background-color: $buttonNormal;
+        color: $wall;
+        font-family: 'Poppins', sans-serif;
+    }
+}
+
 
 .sidebar-icon {
+    flex-grow: 1;
     display: none;
-    margin-left: 80%;
+    margin-left: 70%;
+    height: 1.5em;
 }
+
 @media(max-width: 1100px){
     &.btn{
         width: 9em;
@@ -109,10 +137,6 @@
 
 
 @media (max-width: 700px){
-    .items{
-        display: flex;
-        justify-content: flex-end;
-    }
     .btn {
         display: none;
         width: 0;
@@ -122,6 +146,11 @@
     }
     .sidebar-icon {
         display: block;
-        flex-grow: 0;
     }
 }
+
+ @media (max-width: 400px){
+     .sidebar-icon{
+         margin: 0;
+     }
+ }
