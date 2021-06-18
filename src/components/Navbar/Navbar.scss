@@ -65,7 +65,7 @@
 .sidebar{
     height: 100%;
     width: 0;
-    display: flex;
+    display: none;
     justify-content: space-around;
     z-index: 1;
     top: 0;
@@ -133,6 +133,7 @@
     .dropDown{
         width: 6em;
     }
+
 }
 
 
@@ -140,6 +141,9 @@
     .btn {
         display: none;
         width: 0;
+    }
+    .sidebar {
+        display: flex;
     }
     .dropDown {
         display: none
