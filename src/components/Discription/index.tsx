@@ -8,14 +8,17 @@ interface DescriptionProps {
 
 const Description: React.FC<DescriptionProps> = (props) => {
   const style = {
+    paddingRight: '1em',
+    paddingLeft: '1em',
     paddingTop: '1em',
     fontFamily: 'Montserrat Alternates',
     fontSize: '1em',
-    fontWieght: '700'
+    fontWieght: '700',
+    WhiteSpace: 'nowrap'
   }
   return(
     <div style={style}>
-      <div>{algorithms[props.selectedAlgo].text}</div>
+      {algorithms[props.selectedAlgo].text}
     </div>
   )
 }

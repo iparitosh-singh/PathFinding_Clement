@@ -3,7 +3,6 @@ import Node from "./Node";
 import Legends from "../Legend";
 import Navbar from "../Navbar";
 import Description from '../Discription'
-
 import { BoardProps, gridNode } from "../../interfaces";
 import {
   getNodeVistedOrder,
