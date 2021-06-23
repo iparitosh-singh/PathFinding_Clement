@@ -44,7 +44,6 @@ const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref)
             setPrevState
         }
     })
-
     return (
         <div className="node-container"
             onMouseDown={(event: React.MouseEvent) => {
