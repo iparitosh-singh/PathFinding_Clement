@@ -3,7 +3,6 @@ import {Route, Switch} from 'react-router-dom'
 import Board from '../components/Board'
 import Homepage from '../components/Homepage'
 import useWindowDimensions from '../hooks/useScreenSize'
-import Sorting from '../components/Sorting'
 
 
 
@@ -16,9 +15,6 @@ const MainRouter: React.FC = () => {
         </Route>
         <Route exact path='/homepage' >
           <Homepage/>
-        </Route>
-        <Route exact path='/sorting' >
-          <Sorting/>
         </Route>
     </Switch>
   )
