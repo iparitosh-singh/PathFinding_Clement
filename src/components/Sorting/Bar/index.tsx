@@ -5,17 +5,10 @@ import React, {
   forwardRef,
   memo
 } from 'react'
+import {BarProps, BarHandle} from '../../../interfaces/sortingInterfaces'
 import './Bar.scss'
 
 
-interface BarProps {
-  height: number
-  ref: React.RefObject<BarHandle>
-}
-export interface BarHandle {
-  setHeight: React.Dispatch<React.SetStateAction<number>>
-  height: number
-}
 
 const Bar: React.ForwardRefRenderFunction<BarHandle, BarProps> = (props, ref) => {
   const [height, setHeight] = useState<number>(props.height)
@@ -25,18 +18,18 @@ const Bar: React.ForwardRefRenderFunction<BarHandle, BarProps> = (props, ref) =>
 
   useImperativeHandle(ref, () => {
     return {
-      setHeight,
-      height
+      height,
+      changeHeight
     }
   })
 
-
-  const style = {
-    height:`${height / 5}%`,
+  const changeHeight = (num: number) => {
+    setHeight(num)
   }
+
   return (
     <div className="bar">
-      <div style={style} className="bar-height" />
+      <div style={{height: `${height / 5}%`}} className="bar-height" />
     </div>
   )
 }

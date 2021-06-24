@@ -1,18 +1,15 @@
 import React, {useState, useEffect} from 'react'
-import Bar, {BarHandle} from './Bar'
+import Bar from './Bar'
 import merge_sort from '../../algorithms/sorting_algorithms/quick_sort'
+import {animateMerge, animateQuickSort} from '../sorting_animations'
+import {ArrayNode, BarHandle} from '../../interfaces/sortingInterfaces'
 import './Sorting.scss'
 
 const randomizeArray = (size: number): Array<number> => {
-  let array = Array.from({length: size}, () => Math.floor(Math.random() * (500 - 10)) + 10)
+  let array = Array.from({length: size}, () => Math.floor(Math.random() * (500 - 1)) + 1)
   return array
 }
 
-interface ArrayNode {
-  index: number,
-  value: number,
-  ref: React.RefObject<BarHandle>
-}
 const Sorting: React.FC = () => {
   const [array, setArray] = useState<ArrayNode[]>([])
   const [size, setSize] = useState<number>(50)
@@ -35,6 +32,7 @@ const Sorting: React.FC = () => {
   }
 
   const handleSizeChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
     if(!isSorting)
       setSize(e.target.valueAsNumber)
   }
@@ -44,14 +42,15 @@ const Sorting: React.FC = () => {
     const nodeArray = array.map(bar => {
       return({
         value: bar.value,
-        index: bar.index
       })
     })
-   console.log(merge_sort(nodeArray))
+    const {animations, sortedArray} =  merge_sort(nodeArray)
+    console.log(animations)
+    animateQuickSort(animations, array)
   }
 
   return (
-    <div className="sorting-container">
+    <div className="sorting-container" >
       <input
         type="range"
         min={20}

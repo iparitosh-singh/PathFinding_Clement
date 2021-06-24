@@ -6,15 +6,9 @@ import React, {
     forwardRef,
 } from 'react'
 import './Node.scss'
-import { NodeProps } from '../../../interfaces'
+import { NodeProps, NodeHandle} from '../../../interfaces'
 import { nodeTypes } from '../../../interfaces/constants'
 
-export interface NodeHandle {
-    changeStatus: (newStatus: nodeTypes) => void,
-    status: nodeTypes,
-    prevState: nodeTypes,
-    setPrevState:React.Dispatch<React.SetStateAction<nodeTypes>>
-}
 
 const Node: React.ForwardRefRenderFunction<NodeHandle, NodeProps> = (props, ref) => {
     const [prevState, setPrevState] = useState<nodeTypes>(nodeTypes.UNVISITED)

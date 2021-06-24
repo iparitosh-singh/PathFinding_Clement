@@ -1,44 +1,59 @@
 import {SortingNode, AlgoReturn} from '../../interfaces/sortingInterfaces'
 
-const merge_array = (
-    first: Array<SortingNode>,
-    second: Array<SortingNode>
-): Array<SortingNode> => {
-    let merged: Array<SortingNode> = []
-    while(first.length > 0 && second.length > 0){
-        if(first[0].value < second[0].value){
-            merged.push(first.shift()!)
+const mergeArray = (
+    array: Array<SortingNode>,
+    start: number,
+    middle: number,
+    end: number,
+    animations: any[],
+    aux_array: Array<SortingNode>
+) => {
+    let i = start,
+    k = start,
+    j = middle + 1
+    while(i <= middle && j <= end){
+        if(aux_array[i].value <= aux_array[j].value){
+            animations.push([k, aux_array[i]])
+            array[k++] = aux_array[i++]
         }
-        else {
-            merged.push(second.shift()!)
+        else{
+            animations.push([k, aux_array[j]])
+            array[k++] = aux_array[j++]
         }
     }
-    while(first.length > 0){
-        merged.push(first.shift()!)
+    while(i <= middle){
+        animations.push([k, aux_array[i]])
+        array[k++] = aux_array[i++]
     }
-
-    while(second.length > 0){
-        merged.push(second.shift()!)
+    while(j <= end){
+        animations.push([j, aux_array[j]])
+        array[k++] = aux_array[j++]
     }
-
-    return merged
 }
 
-const mergeSortRecursive = (array: Array<SortingNode>): Array<SortingNode> => {
-    if(array.length === 1){
-        return array
-    }
-    const middle = Math.floor(array.length / 2)
-    let leftA: Array<SortingNode> = array.slice(0, middle)
-    let rightA: Array<SortingNode> = array.slice(middle, array.length)
-    if(!leftA[0]) leftA = [array[0]]
-    if(!rightA[0]) rightA = [array[1]]
-    return merge_array(mergeSortRecursive(leftA), mergeSortRecursive(rightA))
+const mergeSortRecursive = (
+    array: Array<SortingNode>,
+    start: number,
+    end: number,
+    animations: any[],
+    aux_array: Array<SortingNode>
+): void => {
+    if(start === end)
+        return
+    const middle = Math.floor((end + start) / 2)
+
+    mergeSortRecursive(aux_array, start, middle, animations, array)
+    mergeSortRecursive(aux_array, middle + 1, end, animations, array)
+
+    mergeArray(array, start, middle, end, animations, aux_array)
 }
+
 
 const merge_sort = (array: Array<SortingNode>): AlgoReturn => {
-    const sortedArray = mergeSortRecursive(array)
-    return {sortedArray: sortedArray}
+    const aux_array = array.slice()
+    const animations: any[] = []
+    mergeSortRecursive(array, 0, array.length - 1, animations, aux_array)
+    return {sortedArray: array, animations}
 }
 
 export default merge_sort

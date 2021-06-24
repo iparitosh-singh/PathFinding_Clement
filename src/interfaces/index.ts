@@ -1,6 +1,6 @@
 import React from "react";
-import { NodeHandle } from "../components/Board";
 import { algoName } from "./constants";
+import {nodeTypes} from "./constants"
 
 export interface NavProps {
     handleReset: () => void,
@@ -29,7 +29,12 @@ export interface gridNode {
     isFinish: boolean
 }
 
-
+export interface NodeHandle {
+    changeStatus: (newStatus: nodeTypes) => void,
+    status: nodeTypes,
+    prevState: nodeTypes,
+    setPrevState:React.Dispatch<React.SetStateAction<nodeTypes>>
+}
 
 export interface returnValue {
     nodeVisitedOrder : algorithmNode[]
