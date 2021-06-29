@@ -1,10 +1,5 @@
-
-export interface SortingNode{
-    value: number,
-}
-
 export interface AlgoReturn {
-    sortedArray: Array<SortingNode>,
+    sortedArray: Array<number>,
     animations: any[]
 }
 export interface ArrayNode {

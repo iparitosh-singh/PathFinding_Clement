@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useRef} from 'react'
 
-//bomb hook
+//bomb hook 💣
 const useMemoizedCallback = function<T extends (...args: any[]) => any> (callback: T , deps: ReadonlyArray<any>){
 
     const callbackRef = useRef(callback)
@@ -16,5 +16,5 @@ const useMemoizedCallback = function<T extends (...args: any[]) => any> (callbac
 
     return memoizedCallback
 }
-
+//bomb hook 💣
 export default useMemoizedCallback

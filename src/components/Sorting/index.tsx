@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import Bar from './Bar'
-import merge_sort from '../../algorithms/sorting_algorithms/quick_sort'
-import {animateMerge, animateQuickSort} from '../sorting_animations'
+import merge_sort from '../../algorithms/sorting_algorithms/heap_sort'
+import {animateMerge as animate} from '../sorting_animations'
 import {ArrayNode, BarHandle} from '../../interfaces/sortingInterfaces'
 import './Sorting.scss'
 
@@ -39,14 +39,13 @@ const Sorting: React.FC = () => {
 
   const handleSort =(e: React.MouseEvent) => {
     e.preventDefault()
-    const nodeArray = array.map(bar => {
-      return({
-        value: bar.value,
-      })
-    })
+    let nodeArray: Array<number> = []
+    array.forEach(bar => nodeArray.push(bar.value))
     const {animations, sortedArray} =  merge_sort(nodeArray)
-    console.log(animations)
-    animateQuickSort(animations, array)
+    console.log(array)
+    console.log(sortedArray)
+    animate(animations, array)
+
   }
 
   return (

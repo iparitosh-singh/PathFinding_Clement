@@ -5,7 +5,9 @@ import React, {
   forwardRef,
   memo
 } from 'react'
+
 import {BarProps, BarHandle} from '../../../interfaces/sortingInterfaces'
+
 import './Bar.scss'
 
 
