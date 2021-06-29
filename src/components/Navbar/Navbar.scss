@@ -45,6 +45,16 @@
                 }
             }
         }
+        &.maze {
+            &.running {
+                background-color: $red;
+                color: $wall;
+                &:hover{
+                    background-color: $red;
+                }
+            }
+        }
+
         &:hover {
             background-color: $pathFinal;
             color:$buttonNormal;

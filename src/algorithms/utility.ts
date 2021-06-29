@@ -1,6 +1,6 @@
-import { algorithmNode } from "../interfaces"
+import { algorithmNode, MazeNode } from "../interfaces"
 
-export const generateVisited = (grid: algorithmNode[][]) => {
+export const generateVisited = (grid: algorithmNode[][]): boolean[][] => {
     let visited: boolean[][] = []
     for (let i = 0; i < grid.length; i++) {
         let arr : boolean[] = []
@@ -36,6 +36,52 @@ export const getPath = (finish: algorithmNode) => {
         current_node = current_node.previousNode
     }
     return path.reverse()
+}
+
+export const getNextPossibleNodes = (grid: algorithmNode[][], currentNode: algorithmNode): Array<MazeNode> => {
+    let neighbours: MazeNode[] = []
+    for(let i = 0; i < direction.length; i++){
+        let row = currentNode.row + 2 * direction.x[i]
+        let col = currentNode.col+ 2 * direction.y[i]
+        if(row < 0 || row >= grid.length || col < 0 || col >= grid[0].length)
+            continue
+        if(!grid[row][col].isWall)
+            continue
+        let nextNode = grid[row][col]
+        let betweenNode = grid[row - direction.x[i]][col - direction.y[i]]
+        neighbours.push([betweenNode, nextNode])
+    }
+    return neighbours
+}
+
+export const chooseStartEnd = (grid: algorithmNode[][])
+:{
+    start: {row: number, col: number},
+    finish: {row: number, col: number}
+} => {
+    let startRow = Math.floor(Math.random() * grid.length)
+    let startCol = Math.floor(Math.random() * grid[0].length)
+    while(grid[startRow][startCol].isWall){
+        startRow = Math.floor(Math.random() * grid.length)
+        startCol = Math.floor(Math.random() * grid[0].length)
+    }
+
+    let endRow = Math.floor(Math.random() * grid.length)
+    let endCol = Math.floor(Math.random() * grid[0].length)
+
+    while(grid[endRow][endCol].isWall){
+        endRow = Math.floor(Math.random() * grid.length)
+        endCol = Math.floor(Math.random() * grid[0].length)
+    }
+    const start = {
+        row: startRow,
+        col: startCol
+    }
+    const finish = {
+        row: endRow,
+        col: endCol
+    }
+    return {start, finish}
 }
 
 export const direction =  {

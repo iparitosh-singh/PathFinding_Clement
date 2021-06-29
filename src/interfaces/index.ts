@@ -3,6 +3,7 @@ import { NodeHandle } from "../components/Board";
 import { algoName } from "./constants";
 
 export interface NavProps {
+    handleMazeSelect: () => void,
     handleReset: () => void,
     handleAlgoSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void
     handleVisualize: () => void,
@@ -63,4 +64,9 @@ export interface algoType {
             finish: algorithmNode
         ) => returnValue,
         text: string
+}
+
+export interface MazeNode extends Array<algorithmNode>{
+    [0]: algorithmNode,
+    [1]: algorithmNode
 }

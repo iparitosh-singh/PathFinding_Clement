@@ -24,6 +24,7 @@ const styles = sidebar ? {width: '100%'} : {width: '0', display: 'none'}
             <div className='navbar'>
                 <div className='heading'>PathFinding Visualizer</div>
                 <div className="items">
+                    <button className={"btn maze" + running } onClick={() => {props.handleMazeSelect()}}>Make maze</button>
                     <select onChange={handleAlgoSelect} value={selectedAlgo} className='dropDown' >
                         {algorithms.map((algo, index) => (<option key={index} value={index}>{algo.name}</option>))}
                     </select>
@@ -41,6 +42,7 @@ const styles = sidebar ? {width: '100%'} : {width: '0', display: 'none'}
                 </div>
             </div>
             <div className="sidebar" style={styles}>
+                <button className={"btn maze" + running } onClick={() => {props.handleMazeSelect()}}>Visualize maze</button>
                 <button onClick={() => {setSidebar(false)}}>x</button>
                 <button onClick={() => {if(!running) handleVisualize()}}>Visualize</button>
                 <button onClick={handleRedoAlgo}>ClearAlgo</button>

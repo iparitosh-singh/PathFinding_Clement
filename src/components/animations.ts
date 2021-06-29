@@ -9,6 +9,7 @@ import {
     changeNode
 } from "./helper"
 
+import recursive_maze from '../algorithms/MazeAlgorithms/recursive_maze'
 import { gridNode, algorithmNode, returnValue, algoType} from "../interfaces"
 import { nodeTypes, algorithms, actionType } from "../interfaces/constants"
 
@@ -136,8 +137,21 @@ export const redoAlgo= (
             changeNormal(node, nodeTypes.PATHINSTANT)
         }
         const size = path.length - 1
-        //setting the finish path direction
         setStartOrFinishInstant(grid[path[size - 1].row][path[size - 1].col], grid[path[size].row][path[size].col], nodeTypes.FINISH)
     }
 
+}
+
+export const animateMaze = async (grid: gridNode[][]): Promise<void> => {
+    const algoGrid = makeAlgorithmGrid(grid)
+    const {nodesOrder, start, finish} = recursive_maze(algoGrid.nodeGrid)
+    for(const row of grid){
+        for(const node of row)
+            changeNormal(node, nodeTypes.WALL)
+    }
+
+    for(const node of nodesOrder)
+        await animate(grid[node.row][node.col], nodeTypes.UNVISITED, 1)
+    changeNormal(grid[start.row][start.col], nodeTypes.START, nodeTypes.UNVISITED)
+    changeNormal(grid[finish.row][finish.col], nodeTypes.FINISH, nodeTypes.UNVISITED)
 }

@@ -9,7 +9,8 @@ import {
   aninimateVisitedNode,
   animatePath,
   redoAlgo,
-  remakingGrid
+  remakingGrid,
+  animateMaze
 } from '../animations'
 
 import {
@@ -90,24 +91,26 @@ const Board: React.FC<BoardProps> = (props) => {
   );
 
   const handleMouseEnter = useMemoizedCallback(
-    async (event: React.MouseEvent, row: number, col: number): Promise<void> => {
+    (event: React.MouseEvent, row: number, col: number): void => {
       if (event.buttons !== 1 || isRunning) return;
-
       const nodeState = getStatus(grid[row][col]);
-      const specialNode: boolean = (checkStart(nodeState) || checkFinish(nodeState)) ? true : false
+      const currentSpecialNode: boolean = (checkStart(nodeState) || checkFinish(nodeState)) ? true : false
 
       if (!checkStart(nodePressed) && !checkFinish(nodePressed)) {
-        if (!specialNode) {
+        if (!currentSpecialNode) {
           changeNormal(grid[row][col], nodeTypes.WALL, nodeTypes.UNVISITED);
         }
       }
       //if the start/finish node is pressed
       else {
-        if (!specialNode) {
-          changeNormal(grid[row][col], nodePressed, nodeState);
-          if (algoDone) {
+        if(algoDone){
+          if(nodeState !== nodeTypes.WALL){
+            changeNormal(grid[row][col], nodePressed, nodeState);
             redoAlgo(grid, selectedAlgo, { row, col }, nodePressed, nodeState);
           }
+        }
+        else if(!currentSpecialNode) {
+          changeNormal(grid[row][col], nodePressed, nodeState);
         }
       }
     },
@@ -125,20 +128,21 @@ const Board: React.FC<BoardProps> = (props) => {
       const node = grid[row][col];
       if (!node.ref.current) return;
 
-
       //dont change if goinf out of the grid
       const prevStatus = node.ref.current.prevState;
       const nextElement = event.relatedTarget as HTMLElement;
-      const nextNodeClasses = nextElement.className.split(" ");
-      if (
-        nextNodeClasses[0] !== "node"
+      const nextNodeClasses = nextElement.className.split(" ")
+      const specialNode = nextNodeClasses[0] !== "node"
       ||nextNodeClasses[1] === "start"
       ||nextNodeClasses[1] === "finish"
-      ) {
+
+      if (specialNode) {
         setNodePressed(nodeTypes.UNVISITED);
         return;
       }
-        changeNormal(node, prevStatus, nodeTypes.UNVISITED);
+      if(!algoDone && !specialNode){
+        changeNormal(node, prevStatus, nodeTypes.UNVISITED)
+      }
     },
     []
   );
@@ -173,9 +177,14 @@ const Board: React.FC<BoardProps> = (props) => {
     setSelectedAlgo(parseInt(event.target.value));
   };
 
+  const handleMazeSelect = async () => {
+    await animateMaze(grid)
+  }
+
   return (
     <>
       <Navbar
+        handleMazeSelect={handleMazeSelect}
         handleAlgoSelect={handleAlgoSelect}
         handleRedoAlgo={handleRedoAlgo}
         handleVisualize={handleVisualize}
@@ -183,6 +192,7 @@ const Board: React.FC<BoardProps> = (props) => {
         selectedAlgo={selectedAlgo}
         isRunning={isRunning}
         algoDone={algoDone}
+
       />
       <div className="container">
         <Legends/>
