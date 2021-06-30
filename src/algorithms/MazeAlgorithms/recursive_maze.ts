@@ -1,6 +1,18 @@
 import { algorithmNode, MazeNode } from "../../interfaces"
 import {getNextPossibleNodes, chooseStartEnd} from '../utility'
 
+const recursive_maze = (grid: algorithmNode[][]): {
+    nodesOrder: Set<algorithmNode>,
+    start: {row: number, col: number},
+    finish: {row: number, col: number}
+} => {
+    for(const row of grid)
+        for(const node of row)
+            node.isWall = true
+    const nodesOrder = recursiveFunction(grid)
+    const {start, finish} = chooseStartEnd(grid)
+    return {nodesOrder, start, finish}
+}
 
 //even row / col is wall
 const recursiveFunction = (
@@ -29,13 +41,6 @@ const recursiveFunction = (
     }
     return nodesOrder
 }
-const recursive_maze = (grid: algorithmNode[][]) => {
-    for(const row of grid)
-        for(const node of row)
-            node.isWall = true
-    const nodesOrder = recursiveFunction(grid)
-    const {start, finish} = chooseStartEnd(grid)
-    return {nodesOrder, start, finish}
-}
+
 
 export default recursive_maze

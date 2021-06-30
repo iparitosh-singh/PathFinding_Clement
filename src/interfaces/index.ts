@@ -1,14 +1,15 @@
 import React from "react";
 import { NodeHandle } from "../components/Board";
-import { algoName } from "./constants";
+import { algoName, mazeName } from "./constants";
 
 export interface NavProps {
-    handleMazeSelect: () => void,
     handleReset: () => void,
     handleAlgoSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void
+    handleMazeSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void,
     handleVisualize: () => void,
     handleRedoAlgo: () => void,
-    selectedAlgo: number
+    selectedAlgo: number,
+    selectedMaze: number
     isRunning: boolean,
     algoDone: boolean,
 }
@@ -64,6 +65,16 @@ export interface algoType {
             finish: algorithmNode
         ) => returnValue,
         text: string
+}
+
+export interface mazeType {
+    name: mazeName,
+    algorithm: (grid: algorithmNode[][]) => {
+        nodesOrder: Set<algorithmNode>,
+        start: {row: number, col: number},
+        finish: {row: number, col: number}
+    },
+    text: string
 }
 
 export interface MazeNode extends Array<algorithmNode>{

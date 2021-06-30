@@ -9,9 +9,8 @@ import {
     changeNode
 } from "./helper"
 
-import recursive_maze from '../algorithms/MazeAlgorithms/recursive_maze'
 import { gridNode, algorithmNode, returnValue, algoType} from "../interfaces"
-import { nodeTypes, algorithms, actionType } from "../interfaces/constants"
+import { nodeTypes, algorithms, mazeAlgorithms, actionType } from "../interfaces/constants"
 
 export const remakingGrid = (
     action: actionType,
@@ -73,6 +72,20 @@ export const aninimateVisitedNode = async (
                 animate(node, nodeTypes.VISITED, framRate)
             }
         }
+}
+
+export const animateMaze = async (grid: gridNode[][], selectedMaze: number): Promise<void> => {
+    const algoGrid = makeAlgorithmGrid(grid)
+    const {nodesOrder, start, finish} = mazeAlgorithms[selectedMaze].algorithm(algoGrid.nodeGrid)
+    for(const row of grid){
+        for(const node of row)
+            changeNormal(node, nodeTypes.WALL)
+    }
+    let nodeArray = Array.from(nodesOrder)
+    for(const node of nodeArray)
+        await animate(grid[node.row][node.col], nodeTypes.UNVISITED, 1)
+    changeNormal(grid[start.row][start.col], nodeTypes.START, nodeTypes.UNVISITED)
+    changeNormal(grid[finish.row][finish.col], nodeTypes.FINISH, nodeTypes.UNVISITED)
 }
 
 export const getNodeVistedOrder = (selectedAlgo: number, grid: gridNode[][] ): returnValue => {
@@ -142,16 +155,3 @@ export const redoAlgo= (
 
 }
 
-export const animateMaze = async (grid: gridNode[][]): Promise<void> => {
-    const algoGrid = makeAlgorithmGrid(grid)
-    const {nodesOrder, start, finish} = recursive_maze(algoGrid.nodeGrid)
-    for(const row of grid){
-        for(const node of row)
-            changeNormal(node, nodeTypes.WALL)
-    }
-
-    for(const node of nodesOrder)
-        await animate(grid[node.row][node.col], nodeTypes.UNVISITED, 1)
-    changeNormal(grid[start.row][start.col], nodeTypes.START, nodeTypes.UNVISITED)
-    changeNormal(grid[finish.row][finish.col], nodeTypes.FINISH, nodeTypes.UNVISITED)
-}

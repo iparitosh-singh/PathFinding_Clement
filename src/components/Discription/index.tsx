@@ -1,8 +1,9 @@
 import React from 'react'
-import {algorithms} from '../../interfaces/constants'
+import {algorithms, mazeAlgorithms} from '../../interfaces/constants'
 
 interface DescriptionProps {
   selectedAlgo: number
+  selectedMaze: number
 }
 
 
@@ -16,9 +17,12 @@ const Description: React.FC<DescriptionProps> = (props) => {
     fontWieght: '700',
     WhiteSpace: 'nowrap'
   }
+  const {selectedAlgo, selectedMaze} = props
   return(
     <div style={style}>
-      {algorithms[props.selectedAlgo].text}
+      {selectedAlgo === -1 && selectedMaze === -1 ? ('Select an algorithms to visualaise') :
+        (selectedAlgo === -1 ? mazeAlgorithms[selectedMaze].text : algorithms[selectedAlgo].text)
+      }
     </div>
   )
 }

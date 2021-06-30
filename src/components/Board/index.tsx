@@ -31,7 +31,8 @@ const Board: React.FC<BoardProps> = (props) => {
   const [algoDone, setAlgoDone] = useState<boolean>(false);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [nodePressed, setNodePressed] = useState<nodeTypes>(nodeTypes.NODE);
-  const [selectedAlgo, setSelectedAlgo] = useState<number>(0);
+  const [selectedAlgo, setSelectedAlgo] = useState<number>(-1);
+  const [selectedMaze, setSelectedMaze] = useState<number>(-1);
   const [grid, setGrid] = useState<gridNode[][]>([]);
   const [initStart, setInitStart] = useState({
     row: Math.floor(height / 2),
@@ -158,6 +159,11 @@ const Board: React.FC<BoardProps> = (props) => {
   };
 
   const handleVisualize = async (): Promise<void> => {
+    if(selectedAlgo === -1){
+      await animateMaze(grid, selectedMaze)
+      setIsRunning(false)
+      return
+    }
     if (isRunning) return;
     setIsRunning(true);
     const { endReached, path, nodeVisitedOrder } = getNodeVistedOrder(
@@ -175,10 +181,14 @@ const Board: React.FC<BoardProps> = (props) => {
     event: React.ChangeEvent<HTMLSelectElement>
   ): void => {
     setSelectedAlgo(parseInt(event.target.value));
+    setSelectedMaze(-1)
   };
 
-  const handleMazeSelect = async () => {
-    await animateMaze(grid)
+  const handleMazeSelect = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setSelectedMaze(parseInt(event.target.value))
+    setSelectedAlgo(-1);
   }
 
   return (
@@ -190,13 +200,14 @@ const Board: React.FC<BoardProps> = (props) => {
         handleVisualize={handleVisualize}
         handleReset={clearWallAndPath}
         selectedAlgo={selectedAlgo}
+        selectedMaze={selectedMaze}
         isRunning={isRunning}
         algoDone={algoDone}
 
       />
       <div className="container">
         <Legends/>
-        <Description selectedAlgo={selectedAlgo}/>
+        <Description selectedAlgo={selectedAlgo} selectedMaze={selectedMaze}/>
         <div
           className="grid"
           onMouseLeave={() => {

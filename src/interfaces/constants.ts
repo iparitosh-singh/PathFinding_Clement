@@ -1,5 +1,6 @@
-import {algoType} from './index'
+import {algoType, mazeType} from './index'
 import * as algos from '../algorithms'
+import * as mazeAlgos from '../algorithms/MazeAlgorithms'
 export enum nodeTypes {
     WALL = 'wall',
     START = 'start',
@@ -43,6 +44,11 @@ export enum algoName {
     BFS = 'BFS',
     Dijkstra = 'Dijkstar\'s',
     AstarManhattan = 'A* Manhattan',
+}
+
+export enum mazeName {
+    recursive = 'Recursive Maze',
+    prims =  'Prims Maze'
 }
 
 export const startNodes = [
@@ -98,6 +104,19 @@ export const algorithms: Array<algoType> = [
         name: algoName.AstarManhattan,
         algorithm: algos.astarM,
         text: 'A* algorithm knows about the shortest the position of the target'
+    }
+]
+
+export const mazeAlgorithms: Array<mazeType> = [
+    {
+        name: mazeName.recursive,
+        algorithm: mazeAlgos.recursiveMaze,
+        text: 'Recursive Maze generator algorithm'
+    },
+    {
+        name: mazeName.prims,
+        algorithm: mazeAlgos.primsMaze,
+        text: 'Prims Maze generator algorithm'
     }
 ]
 
