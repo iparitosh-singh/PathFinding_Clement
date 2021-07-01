@@ -1,5 +1,6 @@
 import {algoType} from './index'
 import * as algos from '../algorithms'
+import * as sorts from '../algorithms/sorting_algorithms'
 export enum nodeTypes {
     WALL = 'wall',
     START = 'start',
@@ -43,6 +44,12 @@ export enum algoName {
     BFS = 'BFS',
     Dijkstra = 'Dijkstar\'s',
     AstarManhattan = 'A* Manhattan',
+}
+
+export enum sortName {
+    merge ='Merge Sort',
+    quick = 'Quick Sort',
+    heap = 'Heap Sort'
 }
 
 export const startNodes = [
@@ -101,3 +108,18 @@ export const algorithms: Array<algoType> = [
     }
 ]
 
+export const sortings = [
+    {
+        name: sortName.merge,
+        algorithm: sorts.mergeSort
+    },
+
+    {
+        name: sortName.quick,
+        algorithm: sorts.quickSort
+    },
+    {
+        name: sortName.heap,
+        algorithm: sorts.heapSort
+    },
+]

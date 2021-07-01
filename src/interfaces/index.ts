@@ -1,5 +1,5 @@
 import React from "react";
-import { algoName } from "./constants";
+import { algoName, sortName } from "./constants";
 import {nodeTypes} from "./constants"
 
 export interface NavProps {
@@ -61,7 +61,7 @@ export interface NodeProps {
 }
 
 export interface algoType {
-        name: algoName,
+        name: algoName | sortName,
         algorithm: (
             grid: algorithmNode[][],
             start: algorithmNode,

@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import Bar from './Bar'
 import merge_sort from '../../algorithms/sorting_algorithms/heap_sort'
-import {animateMerge as animate} from '../sorting_animations'
+import { animateSort } from '../sorting_animations'
 import {ArrayNode, BarHandle} from '../../interfaces/sortingInterfaces'
+import {sortings} from '../../interfaces/constants'
 import './Sorting.scss'
 
 const randomizeArray = (size: number): Array<number> => {
@@ -13,7 +14,7 @@ const randomizeArray = (size: number): Array<number> => {
 const Sorting: React.FC = () => {
   const [array, setArray] = useState<ArrayNode[]>([])
   const [size, setSize] = useState<number>(50)
-  const [currentAlgo, setCurrentAlgo] = useState<string>('merge_sort')
+  const [currentAlgo, setCurrentAlgo] = useState<number>(0)
   const [isSorting] = useState<boolean>(false)
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const Sorting: React.FC = () => {
   }, [size])
 
   const handleAlgoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCurrentAlgo(e.target.value)
+    setCurrentAlgo(parseInt(e.target.value))
   }
 
   const handleSizeChange = (e : React.ChangeEvent<HTMLInputElement>) => {
@@ -41,11 +42,8 @@ const Sorting: React.FC = () => {
     e.preventDefault()
     let nodeArray: Array<number> = []
     array.forEach(bar => nodeArray.push(bar.value))
-    const {animations, sortedArray} =  merge_sort(nodeArray)
-    console.log(array)
-    console.log(sortedArray)
-    animate(animations, array)
-
+    const {animations} =  sortings[currentAlgo].algorithm(nodeArray)
+    animateSort(animations, array)
   }
 
   return (
@@ -60,7 +58,9 @@ const Sorting: React.FC = () => {
       />
       {size}
       <select name="sorting_algo" onChange={handleAlgoChange} value={currentAlgo}>
-        <option value="merge_sort">Merge Sort </option>
+        {sortings.map((sort, index) => {
+          return(<option value={index} key={index}>{sort.name}</option>)
+        })}
       </select>
       <button onClick={handleSort}>Sort</button>
       <div className="array">
